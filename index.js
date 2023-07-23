@@ -1,3 +1,5 @@
 const Application = require('./app/server');
+require('dotenv').config();
+const PORT = process.env.PORT || 3000;
 
-new Application(3000, 'mongodb://127.0.0.1:27017/botostart-simple-shop');
+new Application(PORT);

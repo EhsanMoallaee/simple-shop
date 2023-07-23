@@ -1,15 +1,14 @@
 const express = require('express');
-const mongoose = require('mongoose');
 const path = require("path");
 const { router } = require('./router/router');
+const morgan = require('morgan');
+const MongodbConnection = require('./utils/database-utils/mongodb.connection');
 
 module.exports = class Application {
     #app = express();
-    #DB_URI;
     #PORT;
-    constructor(PORT , DB_URI) {
+    constructor(PORT) {
         this.#PORT = PORT;
-        this.#DB_URI = DB_URI;
         this.configApplication();
         this.connectToMongoDB();
         this.createServer();
@@ -18,6 +17,7 @@ module.exports = class Application {
     }
 
     configApplication = () => {
+        this.#app.use(morgan('dev'));
         this.#app.use(express.json());
         this.#app.use(express.urlencoded({ extended: true}));
         this.#app.use(express.static(path.join(__dirname, '..', 'public')));
@@ -31,13 +31,7 @@ module.exports = class Application {
     }
 
     connectToMongoDB = () => {
-        mongoose.connect(this.#DB_URI)
-        .then(() => {
-            console.log('Connected to mongoDB successfully');
-        })
-        .catch((err) => {
-            if (err) return console.log('MongoDB connection err : ', err.message);
-        });
+        MongodbConnection.getInstance();
     }
 
     createRoutes = () => {
