@@ -1,7 +1,12 @@
 const express = require('express');
-const path = require("path");
-const { router } = require('./router/router');
+const cors = require('cors');
+const createError = require('http-errors');
 const morgan = require('morgan');
+const path = require("path");
+const swaggerUI = require('swagger-ui-express');
+const swaggerJsDoc = require('swagger-jsdoc');
+
+const { router } = require('./router/router');
 const MongodbConnection = require('./utils/database-utils/mongodb.connection');
 
 module.exports = class Application {
@@ -9,6 +14,7 @@ module.exports = class Application {
     #PORT;
     constructor(PORT) {
         this.#PORT = PORT;
+        this.#app.unsubscribe(cors());
         this.configApplication();
         this.connectToMongoDB();
         this.createServer();
@@ -21,6 +27,29 @@ module.exports = class Application {
         this.#app.use(express.json());
         this.#app.use(express.urlencoded({ extended: true}));
         this.#app.use(express.static(path.join(__dirname, '..', 'public')));
+        const options = {
+            definition: {
+              info: {
+                title: 'Simple shop',
+                version: "0.1.0",
+                description: 'Simple shop description',
+                contact: {
+                    name: 'Ehsan Moallaee',
+                    url: 'https://github.com/EhsanMoallaee',
+                    email: 'ehsanm78@gmail.com',
+                },
+              },
+              servers: [
+                {
+                  url: `http://localhost:${this.#PORT}`,
+                },
+              ],
+            },
+            apis: ['./app/router/*/*.js'],
+          };
+          
+        const specs = swaggerJsDoc(options);
+        this.#app.use('/api-doc', swaggerUI.serve, swaggerUI.setup(specs, { explorer: true }))
     }
 
     createServer = () => {
@@ -40,18 +69,19 @@ module.exports = class Application {
 
     errorHandling = () => {
         this.#app.use((req, res, next) => {
-            return res.status(404).json({
-                statusCode: 404,
-                message: 'Requested page not found!'
-            })
+            next(createError.NotFound('Requested page not found!'));
         });
 
         this.#app.use((err, req, res, next) => {
-            const statusCode = err.status || 500;
-            const message = err.message || 'Internal server error occured'
+            console.log(err);
+            const serverError = createError.InternalServerError('Internal server error occured')
+            const statusCode = err.status || serverError.statusCode;
+            const message = err.message || serverError.message;
             return res.status(statusCode).json({
-                statusCode,
-                message
+                error: {
+                    statusCode,
+                    message
+                }
             })
         })
     }

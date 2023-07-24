@@ -15,6 +15,10 @@ module.exports = class MongodbConnection {
         mongoose.connection.on('connected', () => {
             console.log('Mongoose connection connected to DB successfully');
         })
+        process.on('SIGINT', async () => {
+            await mongoose.connection.close();
+            process.exit(0);
+        })
     }
 
     static getInstance() {

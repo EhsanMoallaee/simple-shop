@@ -3,39 +3,33 @@ const { default: mongoose } = require("mongoose");
 const userSchema = new mongoose.Schema({
     first_name: {
         type: String,
-        required: true
     },
     last_name: {
         type: String,
-        required: true
     },
     username: {
         type: String,
-        required: true,
         lowercase: true,
-        unique: true
+        unique: true,
+        sparse: true
     },
-    phone: {
+    mobile: {
         type: String,
         required: true,
         unique: true
     },
     email: {
         type: String,
-        required: true,
         lowercase: true,
-        unique: true
+        unique: true,
+        sparse: true
     },
     password: {
-        type: String,
-        required: true
+        type: String
     },
     otp: {
-        type: Object,
-        default: {
-            code: 0,
-            expires: 0
-        }
+        code: {type: String, default: ""},
+        expiresIn: {type: String, default: ""}
     },
     bills: {
         type: [String],
@@ -48,10 +42,9 @@ const userSchema = new mongoose.Schema({
     birthday: {
         type: String
     },
-    role: {
-        type: String,
-        default: 'user',
-        enums: ['user', 'admin']
+    roles: {
+        type: [String],
+        default: ['User']
     },
 });
 
