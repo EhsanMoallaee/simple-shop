@@ -3,8 +3,8 @@ const { EXPIRES_IN, USER_ROLE } = require('../../../../utils/constants');
 const { checkOtpValidator } = require('../../../validators/user/checkOtp.validator');
 const { getOtpValidator } = require('../../../validators/user/getOtp.validator');
 const { randomNumber } = require('../../../../utils/fiveDigitsRandomNumber');
-const { UserModel } = require('../../../../models/user.model');
-const { signAccessToken } = require('../../../../utils/signAndVerifyToken');
+const UserModel = require('../../../../models/user.model');
+const { signAccessToken, verifyRefreshToken, signRefreshToken } = require('../../../../utils/signAndVerifyToken');
 
 class UserAuthController {
 
@@ -45,13 +45,28 @@ class UserAuthController {
             mobile: user.mobile
         };
         const accessToken = await signAccessToken(payload);
+        const refreshToken = await signRefreshToken(mobile);
         return res.status(200).json({
             data: {
                 statusCode: 201,
                 message: 'Login successfully',
-                accessToken
+                accessToken,
+                refreshToken
             }
         });
+    }
+
+    refreshToken = async(req, res, next) => {
+        const { refreshToken } = req.body;
+        const {mobile, user} = await verifyRefreshToken(refreshToken);
+        const accessToken = await signAccessToken(mobile);
+        const newRefreshToken = await signRefreshToken(mobile);
+        return res.status(200).json({
+            data: {
+                accessToken,
+                refreshToken: newRefreshToken
+            }
+        })
     }
 
     saveUser = async(mobile, code) => {
@@ -75,13 +90,13 @@ class UserAuthController {
         Object.keys(data).forEach(key => {
             if(['', ' ', null, undefined, 0, '0', NaN].includes(data[key])) delete data[key];
         })
-        console.log(data);
         const updatedUser = await UserModel.findOneAndUpdate(
             { mobile },
             { $set: {otp: data} },
         );
         return !!updatedUser;
     }
+    
 }
 module.exports = {
     UserAuthController: new UserAuthController()

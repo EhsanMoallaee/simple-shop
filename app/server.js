@@ -73,7 +73,7 @@ module.exports = class Application {
         });
 
         this.#app.use((err, req, res, next) => {
-            console.log(err);
+            console.log(err.message);
             const serverError = createError.InternalServerError('Internal server error occured')
             const statusCode = err.status || serverError.statusCode;
             const message = err.message || serverError.message;
