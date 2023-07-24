@@ -17,6 +17,7 @@ module.exports = class Application {
         this.#app.unsubscribe(cors());
         this.configApplication();
         this.connectToMongoDB();
+        this.initRedis();
         this.createServer();
         this.createRoutes();
         this.errorHandling();
@@ -61,6 +62,10 @@ module.exports = class Application {
 
     connectToMongoDB = () => {
         MongodbConnection.getInstance();
+    }
+
+    initRedis = () => {
+        require('./utils/initRedis');
     }
 
     createRoutes = () => {

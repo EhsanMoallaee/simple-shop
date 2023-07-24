@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken');
 const createError = require('http-errors');
 const UserModel = require('../models/user.model');
+const redisClient = require('./initRedis');
 
 function signAccessToken(payload) {
     return new Promise(async (resolve,reject) => {
@@ -21,9 +22,9 @@ function signRefreshToken(payload) {
         const options = {
             expiresIn: '2h'
         }
-        console.log('payload : ', payload);
-        jwt.sign({payload}, secret, options, (err, token) => {
+        jwt.sign({payload}, secret, options, async (err, token) => {
             if(err) reject(createError.InternalServerError('Internal server error occured!'));
+            await redisClient.SETEX(payload, (365 * 24 * 60 * 60), token);
             resolve(token);
         })
     })
@@ -37,7 +38,9 @@ function verifyRefreshToken(token) {
             const mobile = decoded.payload || {};
             const user = await UserModel.findOne({mobile}, {password: 0, otp: 0, bills: 0, discount_code: 0});
             if(!user) reject(createError.Unauthorized('Please login first2'));
-            resolve({mobile, user});
+            const refreshToken = await redisClient.get(user.mobile);
+            if( token == refreshToken) return resolve({mobile, user});
+            reject(createError.Unauthorized('Relogin with refresh token failed'));
         })
     })
 }
