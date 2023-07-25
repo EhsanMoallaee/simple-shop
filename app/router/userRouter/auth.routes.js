@@ -33,6 +33,7 @@ const authRouter = Router();
  */
 
 authRouter.post('/get-otp', UserAuthController.getOtp);
+
 /**
  * @swagger
  * /user/check-otp:
@@ -76,6 +77,7 @@ authRouter.post('/check-otp', UserAuthController.checkOtp);
  *          in: body
  *          required: true
  *          type: string
+ *          example: { "refreshToken": "...sadf45k..."}
  *      responses:
  *          200:
  *              description: Success

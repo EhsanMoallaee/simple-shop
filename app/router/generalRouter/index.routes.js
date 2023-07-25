@@ -28,4 +28,6 @@ const generalRouter = Router();
 
 generalRouter.get('/', loginValidator, homeController.indexPage);
 
-module.exports =  generalRouter;
+module.exports =  {
+    generalRouter
+};

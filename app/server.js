@@ -25,32 +25,32 @@ module.exports = class Application {
 
     configApplication = () => {
         this.#app.use(morgan('dev'));
+        this.#app.use(express.urlencoded({ extended: true }));
         this.#app.use(express.json());
-        this.#app.use(express.urlencoded({ extended: true}));
         this.#app.use(express.static(path.join(__dirname, '..', 'public')));
         const options = {
             definition: {
-              info: {
-                title: 'Simple shop',
-                version: "0.1.0",
-                description: 'Simple shop description',
-                contact: {
-                    name: 'Ehsan Moallaee',
-                    url: 'https://github.com/EhsanMoallaee',
-                    email: 'ehsanm78@gmail.com',
+                // openapi: "3.0.0",
+                info: {
+                    title: 'Simple shop',
+                    version: "0.1.0",
+                    description: 'Simple shop description',
+                    contact: {
+                        name: 'Ehsan Moallaee',
+                        url: 'https://github.com/EhsanMoallaee',
+                        email: 'ehsanm78@gmail.com',
+                    },
                 },
-              },
-              servers: [
-                {
-                  url: `http://localhost:${this.#PORT}`,
-                },
-              ],
+                servers: [
+                    {
+                    url: `http://localhost:${this.#PORT}`,
+                    },
+                ],
             },
             apis: ['./app/router/*/*.js'],
-          };
-          
+        };
         const specs = swaggerJsDoc(options);
-        this.#app.use('/api-doc', swaggerUI.serve, swaggerUI.setup(specs, { explorer: true }))
+        this.#app.use('/api-doc', swaggerUI.serve, swaggerUI.setup(specs));
     }
 
     createServer = () => {

@@ -10,7 +10,7 @@ function signAccessToken(payload) {
             expiresIn: '1y'
         }
         jwt.sign({payload}, secret, options, (err, token) => {
-            if(err) reject(createError.InternalServerError('Internal server error occured!'));
+            if(err) reject(createError.InternalServerError('Internal server error occured'));
             resolve(token);
         })
     })
@@ -23,7 +23,7 @@ function signRefreshToken(payload) {
             expiresIn: '2h'
         }
         jwt.sign({payload}, secret, options, async (err, token) => {
-            if(err) reject(createError.InternalServerError('Internal server error occured!'));
+            if(err) reject(createError.InternalServerError('Internal server error occured'));
             await redisClient.SETEX(payload, (365 * 24 * 60 * 60), token);
             resolve(token);
         })

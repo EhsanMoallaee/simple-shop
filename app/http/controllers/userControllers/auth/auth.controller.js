@@ -1,12 +1,13 @@
 const createError = require('http-errors');
-const { EXPIRES_IN, USER_ROLE } = require('../../../../utils/constants');
+const { ROLES } = require('../../../../utils/constants');
 const { checkOtpValidator } = require('../../../validators/user/checkOtp.validator');
 const { getOtpValidator } = require('../../../validators/user/getOtp.validator');
 const { randomNumber } = require('../../../../utils/fiveDigitsRandomNumber');
 const UserModel = require('../../../../models/user.model');
 const { signAccessToken, verifyRefreshToken, signRefreshToken } = require('../../../../utils/signAndVerifyToken');
+const Controller = require('../../controller');
 
-class UserAuthController {
+class UserAuthController extends Controller {
 
     getOtp = async(req, res, next) => {
         const { error } = getOtpValidator(req.body);
@@ -78,7 +79,7 @@ class UserAuthController {
         if(result) {
             return await this.updateUser(mobile, otp)
         }
-        return !!(await UserModel.create({mobile, otp, roles: [USER_ROLE]}))
+        return !!(await UserModel.create({mobile, otp, roles: [ROLES.USER]}))
     }
 
     checkUserExist = async(mobile) => {
