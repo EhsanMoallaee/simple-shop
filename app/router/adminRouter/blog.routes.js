@@ -8,7 +8,7 @@ const blogRouter = Router();
  * @swagger
  * /admin/blogs:
  *  get:
- *      tags: [Blog]
+ *      tags: [-Blog]
  *      summary: Get all blogs
  *      parameters:
  *      -   name: access-token
@@ -16,7 +16,7 @@ const blogRouter = Router();
  *          type: string
  *          required: true
  *          example: Beare token
- *          value: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjp7Im1vYmlsZSI6IjA5Mzc1MzM4ODc1In0sImlhdCI6MTY5MDM0MjE1MSwiZXhwIjoxNzIxODk5NzUxfQ.wo9uMNxrjuAxUSYAlGY6zPPR6_IKpZeG0PSWR_hfQdw
+ *          value: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjp7Im1vYmlsZSI6IjA5Mzc1MzM4ODc1In0sImlhdCI6MTY5MDQyNzQ1NiwiZXhwIjoxNjkwNDM0NjU2fQ.jDL8UjH9zXAMtA3WulfXaJR-KTkZhmHUQQZ_9qItYxE
  *      responses:
  *          200:
  *              description: Success
@@ -27,7 +27,7 @@ blogRouter.get('/', BlogController.getAllBlogs);
  * @swagger
  * /admin/blogs/add:
  *  post:
- *      tags: [Blog]
+ *      tags: [-Blog]
  *      summary: Create new blog
  *      consumes:
  *          -   multipart/form-data
@@ -41,7 +41,7 @@ blogRouter.get('/', BlogController.getAllBlogs);
  *          type: string
  *          required: true
  *          example: Beare token
- *          value: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjp7Im1vYmlsZSI6IjA5Mzc1MzM4ODc1In0sImlhdCI6MTY5MDM0MjE1MSwiZXhwIjoxNzIxODk5NzUxfQ.wo9uMNxrjuAxUSYAlGY6zPPR6_IKpZeG0PSWR_hfQdw
+ *          value: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjp7Im1vYmlsZSI6IjA5Mzc1MzM4ODc1In0sImlhdCI6MTY5MDQyNzc0MywiZXhwIjoxNzA1OTc5NzQzfQ.dLfT7SqGOVp1pQOn0NaRwKdJmdkScUoPQl4wuSxLDws
  *      -   name: title
  *          in: formData
  *          type: string
@@ -77,7 +77,7 @@ blogRouter.post('/add', [imageUploader.single('image'), stringToArray('tags')], 
  * @swagger
  * /admin/blogs/{id}:
  *  get:
- *      tags: [Blog]
+ *      tags: [-Blog]
  *      summary: Get one blog by id
  *      parameters:
  *      -   name: id
@@ -89,7 +89,7 @@ blogRouter.post('/add', [imageUploader.single('image'), stringToArray('tags')], 
  *          type: string
  *          required: true
  *          example: Beare token
- *          value: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjp7Im1vYmlsZSI6IjA5Mzc1MzM4ODc1In0sImlhdCI6MTY5MDM0MjE1MSwiZXhwIjoxNzIxODk5NzUxfQ.wo9uMNxrjuAxUSYAlGY6zPPR6_IKpZeG0PSWR_hfQdw
+ *          value: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjp7Im1vYmlsZSI6IjA5Mzc1MzM4ODc1In0sImlhdCI6MTY5MDQyNzc0MywiZXhwIjoxNzA1OTc5NzQzfQ.dLfT7SqGOVp1pQOn0NaRwKdJmdkScUoPQl4wuSxLDws
  *      responses:
  *          200:
  *              description: Success
@@ -100,7 +100,7 @@ blogRouter.get('/:id', BlogController.getBlogById);
  * @swagger
  * /admin/blogs/{id}:
  *  delete:
- *      tags: [Blog]
+ *      tags: [-Blog]
  *      summary: Delete one blog by id
  *      parameters:
  *      -   name: id
@@ -112,7 +112,7 @@ blogRouter.get('/:id', BlogController.getBlogById);
  *          type: string
  *          required: true
  *          example: Beare token
- *          value: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjp7Im1vYmlsZSI6IjA5Mzc1MzM4ODc1In0sImlhdCI6MTY5MDM0MjE1MSwiZXhwIjoxNzIxODk5NzUxfQ.wo9uMNxrjuAxUSYAlGY6zPPR6_IKpZeG0PSWR_hfQdw
+ *          value: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjp7Im1vYmlsZSI6IjA5Mzc1MzM4ODc1In0sImlhdCI6MTY5MDQyNzc0MywiZXhwIjoxNzA1OTc5NzQzfQ.dLfT7SqGOVp1pQOn0NaRwKdJmdkScUoPQl4wuSxLDws
  *      responses:
  *          200:
  *              description: Success
@@ -123,7 +123,7 @@ blogRouter.delete('/:id', BlogController.deleteBlogById);
  * @swagger
  * /admin/blogs/update/{id}:
  *  patch:
- *      tags: [Blog]
+ *      tags: [-Blog]
  *      summary: Update a blog
  *      consumes:
  *          -   multipart/form-data
@@ -137,7 +137,7 @@ blogRouter.delete('/:id', BlogController.deleteBlogById);
  *          type: string
  *          required: true
  *          example: Beare token
- *          value: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjp7Im1vYmlsZSI6IjA5Mzc1MzM4ODc1In0sImlhdCI6MTY5MDM0MjE1MSwiZXhwIjoxNzIxODk5NzUxfQ.wo9uMNxrjuAxUSYAlGY6zPPR6_IKpZeG0PSWR_hfQdw
+ *          value: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjp7Im1vYmlsZSI6IjA5Mzc1MzM4ODc1In0sImlhdCI6MTY5MDQyNzc0MywiZXhwIjoxNzA1OTc5NzQzfQ.dLfT7SqGOVp1pQOn0NaRwKdJmdkScUoPQl4wuSxLDws
  *      -   name: id
  *          in: path
  *          type: string

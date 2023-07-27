@@ -3,12 +3,13 @@ const { generalRouter } = require('./generalRouter/index.routes');
 const { authRouter } = require('./userRouter/auth.routes');
 const { developerRouter } = require('./developerRouter/developer.routes');
 const { adminRouter } = require('./adminRouter/admin.routes');
+const { verifyAccessToken, checkRole } = require('../http/middlewares/login.middleware');
 const router = Router();
 
 router.use('/', generalRouter);
 router.use('/developer', developerRouter);
 router.use('/user', authRouter);
-router.use('/admin', adminRouter);
+router.use('/admin', [verifyAccessToken, checkRole('ADMIN')], adminRouter);
 
 module.exports = {
     router,
