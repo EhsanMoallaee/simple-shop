@@ -1,6 +1,6 @@
 const { Router } = require('express');
 const homeController = require('../../http/controllers/generalControllers/home.controller');
-const { loginValidator } = require('../../http/middlewares/login.middleware');
+const { loginMiddleware } = require('../../http/middlewares/login.middleware');
 const generalRouter = Router();
 /**
  * @swagger
@@ -26,7 +26,7 @@ const generalRouter = Router();
  *              description: Not Found
  */
 
-generalRouter.get('/', loginValidator, homeController.indexPage);
+generalRouter.get('/', loginMiddleware, homeController.indexPage);
 
 module.exports =  {
     generalRouter

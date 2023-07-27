@@ -7,7 +7,7 @@ function signAccessToken(payload) {
     return new Promise(async (resolve,reject) => {
         const secret = process.env.ACCESS_TOKEN_SECRET;
         const options = {
-            expiresIn: '1y'
+            expiresIn: '2h'
         }
         jwt.sign({payload}, secret, options, (err, token) => {
             if(err) reject(createError.InternalServerError('Internal server error occured'));
@@ -20,7 +20,7 @@ function signRefreshToken(payload) {
     return new Promise(async (resolve, reject) => {
         const secret = process.env.REFRESH_TOKEN_SECRET;
         const options = {
-            expiresIn: '2h'
+            expiresIn: '1y'
         }
         jwt.sign({payload}, secret, options, async (err, token) => {
             if(err) reject(createError.InternalServerError('Internal server error occured'));

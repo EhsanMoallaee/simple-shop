@@ -8,14 +8,14 @@ const categorySchema = new mongoose.Schema({
     parent: {
         type: mongoose.Types.ObjectId,
         default: undefined,
-        ref: 'category'
+        ref: 'category',
     },
 }, { id: false, versionKey: false, toJSON: {virtuals: true} });
 
 categorySchema.virtual('children', {
     ref: 'category',
     localField: '_id',
-    foreignField: 'parent',
+    foreignField: 'parent'
 });
 
 categorySchema

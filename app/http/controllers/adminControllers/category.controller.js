@@ -15,17 +15,16 @@ class CategoryController extends Controller {
         const category = await CategoryModel.create({ title, parent });
         if(!category) return next(createError.InternalServerError('Internal server error occured'));
         return res.status(201).json({
+            statusCode: 201,
+            success: true,
+            message: 'Category added successfully',
             data: {
-                statusCode: 201,
-                success: true,
-                message: 'Category added successfully'
             }
         })
     }
 
     removeCategory = async(req, res, next) => {
         const {id} = req.params;
-        // const result = await CategoryModel.findByIdAndRemove({ _id: id });
         const result = await CategoryModel.deleteMany({$or: [{ _id: id }, { parent: id }]});
         console.log(result);
         if(!result || result.deletedCount == 0) return next(createError.NotFound('Category not found'));
@@ -46,9 +45,10 @@ class CategoryController extends Controller {
         const updateResult = await CategoryModel.findByIdAndUpdate({_id: id}, { $set: {title} }, { new: true }).select({__v: 0});
         if(!updateResult) return next(createError.NotFound('Category not found'));
         return res.status(200).json({
+            statusCode: 200,
+            success: true,
+            message: 'Category updated successfully',
             data: {
-                statusCode: 200,
-                message: 'Category updated successfully',
                 updateResult
             }
         })
@@ -80,11 +80,13 @@ class CategoryController extends Controller {
         //         }
         //     }
         // ]);
+
         const allCategories = await CategoryModel.find({ parent: undefined }, { __v: 0});
         if(!allCategories || allCategories.length == 0) return next(createError.NotFound('Category not found'));
         return res.status(200).json({
+            statusCode: 200,
+            success: true,
             data: {
-                statusCode: 200,
                 allCategories
             }
         })
@@ -103,8 +105,9 @@ class CategoryController extends Controller {
         ]);
         if(!allCategories || allCategories.length == 0) return next(createError.NotFound('Category not found'));
         return res.status(200).json({
+            statusCode: 200,
+            success: true,
             data: {
-                statusCode: 200,
                 allCategories
             }
         })
@@ -114,8 +117,9 @@ class CategoryController extends Controller {
         const rootCategories = await CategoryModel.find({ parent: undefined }, {__v: 0});
         if(!rootCategories || rootCategories.length == 0) return next(createError.NotFound('Category not found'));
         return res.status(200).json({
+            statusCode: 200,
+            success: true,
             data: {
-                statusCode: 200,
                 rootCategories
             }
         })
@@ -147,8 +151,9 @@ class CategoryController extends Controller {
         ]);
         if(!category || category.length == 0) return next(createError.NotFound('Category not found'));
         return res.status(200).json({
+            statusCode: 200,
+            success: true,
             data: {
-                statusCode: 200,
                 category
             }
         })
@@ -159,8 +164,9 @@ class CategoryController extends Controller {
         const children = await CategoryModel.find({ parent }, {__v: 0, parent: 0});
         if(!children || children.length == 0) return next(createError.NotFound('Category not found'));
         return res.status(200).json({
+            statusCode: 200,
+            success: true,
             data: {
-                statusCode: 200,
                 children
             }
         })

@@ -1,11 +1,36 @@
 const { default: mongoose } = require("mongoose");
 
+const commentSchema = new mongoose.Schema({
+    user: {
+        type: mongoose.Types.ObjectId,
+        ref: 'user',
+        required: true
+    },
+    comment: {
+        type: String,
+        required: true
+    },
+    createdAt: {
+        type: Date,
+        default: new Date()
+    },
+    parent: {
+        type: mongoose.Types.ObjectId,
+        default: undefined
+    }
+})
+
 const blogSchema = new mongoose.Schema({
     author: {
         type: mongoose.Types.ObjectId,
+        ref: 'user',
         required: true
     },
     title: {
+        type: String,
+        required: true
+    },
+    brief_text: {
         type: String,
         required: true
     },
@@ -22,26 +47,50 @@ const blogSchema = new mongoose.Schema({
         default: []
     },
     category: {
-        type: mongoose.Types.ObjectId,
+        type: [mongoose.Types.ObjectId],
+        ref: 'category',
         required: true
     },
     comments: {
-        type: [mongoose.Types.ObjectId],
+        type: [commentSchema],
         default: []
     },
     likes: {
         type: [mongoose.Types.ObjectId],
+        ref: 'users',
         default: []
     },
     dislikes: {
         type: [mongoose.Types.ObjectId],
+        ref: 'users',
         default: []
     },
     bookmarks: {
         type: [mongoose.Types.ObjectId],
+        ref: 'users',
         default: []
     }
+}, { timestamps: true, versionKey: false, toJSON: {virtuals: true} });
+
+blogSchema.virtual('user_detail', {
+    ref: 'user',
+    localField: '_id',
+    foreignField: 'author',
 });
+blogSchema.virtual('category_detail', {
+    ref: 'category',
+    localField: '_id',
+    foreignField: 'category',
+});
+
+// blogSchema
+// .pre('findOne', autoPopulate)
+// .pre('find', autoPopulate)
+
+// function autoPopulate(next) {
+//     this.populate([{path: 'user', select: {__v: 0, id: 0}}]);
+//     next();
+// }
 
 module.exports = {
     BlogModel: mongoose.model('blog', blogSchema)
