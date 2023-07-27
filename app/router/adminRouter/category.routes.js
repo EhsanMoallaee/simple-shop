@@ -4,25 +4,36 @@ const categoryRouter = Router();
 
 /**
  * @swagger
+ *  components:
+ *      schemas:
+ *          Category:
+ *              type: object
+ *              required:
+ *                  -   title
+ *              properties:
+ *                  title:
+ *                      type: string
+ *                      description: Title of category
+ *                  parent:
+ *                      type: string
+ *                      description: Parent of this category if exist
+ */
+
+/**
+ * @swagger
  * /admin/category/add:
  *  post:
  *      tags: [-Category]
  *      summary: Create new category
- *      parameters:
- *      -   name: access-token
- *          in: header
- *          type: string
+ *      requestBody:
  *          required: true
- *          example: Beare token
- *          value: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjp7Im1vYmlsZSI6IjA5Mzc1MzM4ODc1In0sImlhdCI6MTY5MDQyNzc0MywiZXhwIjoxNzA1OTc5NzQzfQ.dLfT7SqGOVp1pQOn0NaRwKdJmdkScUoPQl4wuSxLDws
- *      -   name: title
- *          in: formData
- *          type: string
- *          required: true
- *      -   name: parent
- *          in: formData
- *          type: string
- *          required: false
+ *          content:
+ *              application/x-www-form-urlencoded:
+ *                  schema:
+ *                      $ref: '#/components/schemas/Category'
+ *              application/json:
+ *                  schema:
+ *                      $ref: '#/components/schemas/Category'
  *      responses:
  *          201:
  *              description: Success
@@ -35,13 +46,6 @@ categoryRouter.post('/add', CategoryController.addCategory);
  *  get:
  *      tags: [-Category]
  *      summary: This route returns all root categories
- *      parameters:
- *      -   name: access-token
- *          in: header
- *          type: string
- *          required: true
- *          example: Beare token
- *          value: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjp7Im1vYmlsZSI6IjA5Mzc1MzM4ODc1In0sImlhdCI6MTY5MDQyNzc0MywiZXhwIjoxNzA1OTc5NzQzfQ.dLfT7SqGOVp1pQOn0NaRwKdJmdkScUoPQl4wuSxLDws
  *      responses:
  *          200:
  *              description: Success
@@ -55,12 +59,6 @@ categoryRouter.get('/root-categories', CategoryController.getAllRootCategories);
  *      tags: [-Category]
  *      summary: This route returns all children of a category
  *      parameters:
- *      -   name: access-token
- *          in: header
- *          type: string
- *          required: true
- *          example: Beare token
- *          value: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjp7Im1vYmlsZSI6IjA5Mzc1MzM4ODc1In0sImlhdCI6MTY5MDQyNzc0MywiZXhwIjoxNzA1OTc5NzQzfQ.dLfT7SqGOVp1pQOn0NaRwKdJmdkScUoPQl4wuSxLDws
  *      -   name: parent
  *          in: path
  *          required: true
@@ -69,7 +67,7 @@ categoryRouter.get('/root-categories', CategoryController.getAllRootCategories);
  *          200:
  *              description: Success
  */
-categoryRouter.get('/children/:parent', CategoryController.getChildsOfCategory);
+categoryRouter.get('/children/:parent', CategoryController.getChildrenOfCategory);
 
 /**
  * @swagger
@@ -77,13 +75,6 @@ categoryRouter.get('/children/:parent', CategoryController.getChildsOfCategory);
  *  get:
  *      tags: [-Category]
  *      summary: This route returns all categories
- *      parameters:
- *      -   name: access-token
- *          in: header
- *          type: string
- *          required: true
- *          example: Beare token
- *          value: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjp7Im1vYmlsZSI6IjA5Mzc1MzM4ODc1In0sImlhdCI6MTY5MDQyNzc0MywiZXhwIjoxNzA1OTc5NzQzfQ.dLfT7SqGOVp1pQOn0NaRwKdJmdkScUoPQl4wuSxLDws
  *      responses:
  *          200:
  *              description: Success
@@ -97,12 +88,6 @@ categoryRouter.get('/all', CategoryController.getAllCategories);
  *      tags: [-Category]
  *      summary: This route delete a category by id
  *      parameters:
- *      -   name: access-token
- *          in: header
- *          type: string
- *          required: true
- *          example: Beare token
- *          value: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjp7Im1vYmlsZSI6IjA5Mzc1MzM4ODc1In0sImlhdCI6MTY5MDQyNzc0MywiZXhwIjoxNzA1OTc5NzQzfQ.dLfT7SqGOVp1pQOn0NaRwKdJmdkScUoPQl4wuSxLDws
  *      -   name: id
  *          in: path
  *          required: true
@@ -121,13 +106,6 @@ categoryRouter.delete('/remove/:id', CategoryController.removeCategory);
  *  get:
  *      tags: [-Category]
  *      summary: Get all categories without populate and nested structure
- *      parameters:
- *      -   name: access-token
- *          in: header
- *          type: string
- *          required: true
- *          example: Beare token
- *          value: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjp7Im1vYmlsZSI6IjA5Mzc1MzM4ODc1In0sImlhdCI6MTY5MDQyNzc0MywiZXhwIjoxNzA1OTc5NzQzfQ.dLfT7SqGOVp1pQOn0NaRwKdJmdkScUoPQl4wuSxLDws
  *      responses:
  *          200:
  *              description: Success
@@ -143,12 +121,6 @@ categoryRouter.get('/list-of-all', CategoryController.getAllCategoriesWithoutPop
  *      tags: [-Category]
  *      summary: This route find a category and it's children by id
  *      parameters:
- *      -   name: access-token
- *          in: header
- *          type: string
- *          required: true
- *          example: Beare token
- *          value: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjp7Im1vYmlsZSI6IjA5Mzc1MzM4ODc1In0sImlhdCI6MTY5MDQyNzc0MywiZXhwIjoxNzA1OTc5NzQzfQ.dLfT7SqGOVp1pQOn0NaRwKdJmdkScUoPQl4wuSxLDws
  *      -   name: id
  *          in: path
  *          required: true
@@ -168,20 +140,19 @@ categoryRouter.get('/:id', CategoryController.getCategoryById);
  *      tags: [-Category]
  *      summary: This route find a category by id and updates its title
  *      parameters:
- *      -   name: access-token
- *          in: header
- *          type: string
+ *          -   in: path
+ *              name: id
+ *              required: true
+ *              type: string
+ *      requestBody:
  *          required: true
- *          example: Beare token
- *          value: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjp7Im1vYmlsZSI6IjA5Mzc1MzM4ODc1In0sImlhdCI6MTY5MDQyNzc0MywiZXhwIjoxNzA1OTc5NzQzfQ.dLfT7SqGOVp1pQOn0NaRwKdJmdkScUoPQl4wuSxLDws
- *      -   name: id
- *          in: path
- *          required: true
- *          type: string
- *      -   name: title
- *          in: formData
- *          required: true
- *          type: string
+ *          content:
+ *              application/x-www-form-urlencoded:
+ *                  schema:
+ *                      $ref: '#/components/schemas/Category'
+ *              application/json:
+ *                  schema:
+ *                      $ref: '#/components/schemas/Category'
  *      responses:
  *          200:
  *              description: Success

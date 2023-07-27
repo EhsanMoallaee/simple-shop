@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken')
 const UserModel = require('../../models/user.model');
 
 function getToken(headers) {
-    const [bearer, token] = headers?.['access-token']?.split(' ') || [];
+    const [bearer, token] = headers?.authorization?.split(' ') || [];
     if(token && bearer?.toLowerCase() == 'bearer') return token;
     throw createError.Unauthorized('Your account did\'t recognised,login first');
 }

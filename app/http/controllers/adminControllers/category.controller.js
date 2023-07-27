@@ -159,7 +159,7 @@ class CategoryController extends Controller {
         })
     }
 
-    getChildsOfCategory = async(req, res, next) => {
+    getChildrenOfCategory = async(req, res, next) => {
         const { parent } = req.params;
         const children = await CategoryModel.find({ parent }, {__v: 0, parent: 0});
         if(!children || children.length == 0) return next(createError.NotFound('Category not found'));

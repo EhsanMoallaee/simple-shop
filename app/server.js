@@ -30,7 +30,7 @@ module.exports = class Application {
         this.#app.use(express.static(path.join(__dirname, '..', 'public')));
         const options = {
             definition: {
-                // openapi: "3.0.0",
+                openapi: "3.0.0",
                 info: {
                     title: 'Simple shop',
                     version: "0.1.0",
@@ -46,11 +46,21 @@ module.exports = class Application {
                     url: `http://localhost:${this.#PORT}`,
                     },
                 ],
+                components: {
+                    securitySchemes: {
+                        BearerAuth: {
+                            type: 'http',
+                            scheme: 'bearer',
+                            bearerFormat: 'JWT',                            
+                        }
+                    }
+                },
+                security: [{ BearerAuth : [] }]
             },
             apis: ['./app/router/*/*.js'],
         };
         const specs = swaggerJsDoc(options);
-        this.#app.use('/api-doc', swaggerUI.serve, swaggerUI.setup(specs));
+        this.#app.use('/api-doc', swaggerUI.serve, swaggerUI.setup(specs, { explorer: true }));
     }
 
     createServer = () => {

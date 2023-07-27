@@ -6,17 +6,44 @@ const blogRouter = Router();
 
 /**
  * @swagger
+ *  components:
+ *      schemas:
+ *          Blog:
+ *              type: object
+ *              required:
+ *                  -   title
+ *                  -   brief_text
+ *                  -   text
+ *                  -   image
+ *                  -   tags
+ *                  -   category
+ *              properties:
+ *                  title:
+ *                      type: string
+ *                      description: Title of category
+ *                  brief_text:
+ *                      type: string
+ *                      description: Brief text of blog
+ *                  text:
+ *                      type: string
+ *                      description: Text of blog
+ *                  tags:
+ *                      type: string
+ *                      description: The list of tags, example 'tag1#tag2#tag_3'
+ *                  category:
+ *                      type: string
+ *                      description: Id of category as a foreign key
+ *                  image:
+ *                      type: file
+ *                      description: Index picture of blog
+ */
+
+/**
+ * @swagger
  * /admin/blogs:
  *  get:
  *      tags: [-Blog]
  *      summary: Get all blogs
- *      parameters:
- *      -   name: access-token
- *          in: header
- *          type: string
- *          required: true
- *          example: Beare token
- *          value: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjp7Im1vYmlsZSI6IjA5Mzc1MzM4ODc1In0sImlhdCI6MTY5MDQyNzQ1NiwiZXhwIjoxNjkwNDM0NjU2fQ.jDL8UjH9zXAMtA3WulfXaJR-KTkZhmHUQQZ_9qItYxE
  *      responses:
  *          200:
  *              description: Success
@@ -29,47 +56,17 @@ blogRouter.get('/', BlogController.getAllBlogs);
  *  post:
  *      tags: [-Blog]
  *      summary: Create new blog
- *      consumes:
- *          -   multipart/form-data
- *          -   application/x-ww-form-data-urlencoded
- *      produces:
- *          -   multipart/form-data
- *          -   application/x-ww-form-data-urlencoded
- *      parameters:
- *      -   name: access-token
- *          in: header
- *          type: string
+ *      requestBody:
  *          required: true
- *          example: Beare token
- *          value: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjp7Im1vYmlsZSI6IjA5Mzc1MzM4ODc1In0sImlhdCI6MTY5MDQyNzc0MywiZXhwIjoxNzA1OTc5NzQzfQ.dLfT7SqGOVp1pQOn0NaRwKdJmdkScUoPQl4wuSxLDws
- *      -   name: title
- *          in: formData
- *          type: string
- *          required: true
- *      -   name: text
- *          in: formData
- *          type: string
- *          required: true
- *      -   name: brief_text
- *          in: formData
- *          type: string
- *          required: true
- *      -   name: tags
- *          in: formData
- *          type: string
- *          required: false
- *          example: tag1#tag2#tag3_foo#foo_bar
- *      -   name: category
- *          in: formData
- *          type: string
- *          required: true
- *      -   name: image
- *          in: formData
- *          type: file
- *          required: true
+ *          content:
+ *              multipart/form-data:
+ *                  schema: 
+ *                      $ref: '#/components/schemas/Blog'
  *      responses:
  *          201:
  *              description: Success
+ *          400:
+ *              description: Bad request
  */
 blogRouter.post('/add', [imageUploader.single('image'), stringToArray('tags')], BlogController.addBlog);
 
@@ -84,12 +81,6 @@ blogRouter.post('/add', [imageUploader.single('image'), stringToArray('tags')], 
  *          in: path
  *          type: string
  *          required: true
- *      -   name: access-token
- *          in: header
- *          type: string
- *          required: true
- *          example: Beare token
- *          value: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjp7Im1vYmlsZSI6IjA5Mzc1MzM4ODc1In0sImlhdCI6MTY5MDQyNzc0MywiZXhwIjoxNzA1OTc5NzQzfQ.dLfT7SqGOVp1pQOn0NaRwKdJmdkScUoPQl4wuSxLDws
  *      responses:
  *          200:
  *              description: Success
@@ -107,12 +98,6 @@ blogRouter.get('/:id', BlogController.getBlogById);
  *          in: path
  *          type: string
  *          required: true
- *      -   name: access-token
- *          in: header
- *          type: string
- *          required: true
- *          example: Beare token
- *          value: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjp7Im1vYmlsZSI6IjA5Mzc1MzM4ODc1In0sImlhdCI6MTY5MDQyNzc0MywiZXhwIjoxNzA1OTc5NzQzfQ.dLfT7SqGOVp1pQOn0NaRwKdJmdkScUoPQl4wuSxLDws
  *      responses:
  *          200:
  *              description: Success
@@ -125,43 +110,20 @@ blogRouter.delete('/:id', BlogController.deleteBlogById);
  *  patch:
  *      tags: [-Blog]
  *      summary: Update a blog
- *      consumes:
- *          -   multipart/form-data
- *          -   application/x-ww-form-data-urlencoded
- *      produces:
- *          -   multipart/form-data
- *          -   application/x-ww-form-data-urlencoded
  *      parameters:
- *      -   name: access-token
- *          in: header
- *          type: string
- *          required: true
- *          example: Beare token
- *          value: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjp7Im1vYmlsZSI6IjA5Mzc1MzM4ODc1In0sImlhdCI6MTY5MDQyNzc0MywiZXhwIjoxNzA1OTc5NzQzfQ.dLfT7SqGOVp1pQOn0NaRwKdJmdkScUoPQl4wuSxLDws
  *      -   name: id
  *          in: path
  *          type: string
  *          required: true
- *      -   name: title
- *          in: formData
- *          type: string
- *      -   name: text
- *          in: formData
- *          type: string
- *      -   name: brief_text
- *          in: formData
- *          type: string
- *      -   name: tags
- *          in: formData
- *          type: string
- *          required: false
- *          example: tag1#tag2#tag3_foo#foo_bar
- *      -   name: category
- *          in: formData
- *          type: string
- *      -   name: image
- *          in: formData
- *          type: file
+ *      requestBody:
+ *          required: true
+ *          content:
+ *              application/x-www-form-urlencoded:
+ *                  schema:
+ *                      $ref: '#/components/schemas/Blog'
+ *              application/json:
+ *                  schema:
+ *                      $ref: '#/components/schemas/Blog'
  *      responses:
  *          201:
  *              description: Success
