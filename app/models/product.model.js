@@ -6,7 +6,7 @@ const productSchema = new mongoose.Schema({
     brief_text: { type: String, required: true },
     text: { type: String, required: true },
     image: { type: String, required: true },
-    gallery_images: { type: [String], required: true },
+    gallery_images: { type: [String] },
     tags: { type: [String], ref: 'tags', default: [] },
     category: { type: mongoose.Types.ObjectId, ref: 'category', required: true },
     comments: { type: [commentSchema], default: [] },

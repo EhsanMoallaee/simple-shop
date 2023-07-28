@@ -20,6 +20,7 @@ const adminProductRouter = Router();
  *                  -   price
  *                  -   discount
  *                  -   count
+ *                  -   gallery_images
  *              properties:
  *                  type:
  *                      type: string
@@ -64,11 +65,17 @@ const adminProductRouter = Router();
  *                  weigth:
  *                      type: integer
  *                      description: weigth of product (Gram)
- *                  image:
- *                      type: file
- *                      description: Images of product
+ *                  gallery_images:
+ *                      type: array
+ *                      items: 
+ *                          type: string
+ *                          format: binary
+ *                      description: Gallery images of product at least one image is required
 */
- 
+
+//  *                  image:
+//  *                      type: file
+//  *                      description: Main image of product
 
 /**
  * @swagger
@@ -86,7 +93,7 @@ const adminProductRouter = Router();
  *          201:
  *              description: Success
  */
-adminProductRouter.post('/add', [imageUploader.single('image'), stringToArray('tags')], ProductController.addProduct);
+adminProductRouter.post('/add', [imageUploader.array('gallery_images', 10), stringToArray('tags')], ProductController.addProduct);
 
 /**
  * @swagger

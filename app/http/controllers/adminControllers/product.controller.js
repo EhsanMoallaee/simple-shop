@@ -20,10 +20,12 @@ class ProductController extends Controller {
                 height: req.body.height ? Number(req.body.height) : 0,
                 length: req.body.length ? Number(req.body.length) : 0,
                 width: req.body.width ? Number(req.body?.width) : 0,
-                weigth: req.body.weigth ? Number(req.body.weigth) : 0
+                weigth: req.body.weigth ? Number(req.body.weigth) : 0,
             }
         }
-        const productData = { ...req.body, image: req.image, features }
+        if(!req.images || req?.images.length == 0) return next(createError.BadRequest('Uploading at least one image is required'))
+        req.image = req?.images ? req.images[0] : null;
+        const productData = { ...req.body, image: req?.image, gallery_images: req?.images, features }
         const product = await ProductModel.create(productData);
         if(!product) {
             deleteFileFromPublic(req.image);

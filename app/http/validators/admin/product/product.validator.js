@@ -58,7 +58,8 @@ function addProductValidator(data) {
         weigth: Joi.number().allow('', 0).positive().max(50000).messages({
             'number.positive': 'Weigth number should be positive number',
             'number.max': 'Weigth number should be lower than 50,000'
-        })
+        }),
+        gallery_images: Joi.allow(null)
     })
     return schema.validate(data);
 }
