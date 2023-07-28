@@ -1,5 +1,4 @@
 const createError = require("http-errors");
-const path = require('path');
 const { BlogModel } = require("../../../models/blog.model");
 const { addBlogValidator } = require("../../validators/admin/blog/blog.validator");
 const Controller = require("../controller");

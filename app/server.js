@@ -30,7 +30,7 @@ module.exports = class Application {
         this.#app.use(express.static(path.join(__dirname, '..', 'public')));
         const options = {
             definition: {
-                openapi: "3.0.0",
+                openapi: "3.1.0",
                 info: {
                     title: 'Simple shop',
                     version: "0.1.0",
@@ -88,6 +88,8 @@ module.exports = class Application {
         });
 
         this.#app.use((err, req, res, next) => {
+            // console.log(err);
+            // console.log('-------------------------------------');
             console.log(err.message);
             const serverError = createError.InternalServerError('Internal server error occured')
             const statusCode = err.status || serverError.statusCode;

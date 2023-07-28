@@ -30,7 +30,6 @@ function fileFilter(req, file, cb) {
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        console.log(file);
         if(file?.fieldname){
             const filePath = createAddress(req);
             return cb(null, filePath);
@@ -43,7 +42,6 @@ const storage = multer.diskStorage({
             let originalname = file.originalname.replace(/[^A-Za-z0-9.]/g, "-");
             const filename = "img" + Date.now() + "-" + originalname;
             req.image = req.filePath + '/' + filename;
-            console.log('filename : ', filename);
             return cb(null, filename);
         }
         cb(null, null);

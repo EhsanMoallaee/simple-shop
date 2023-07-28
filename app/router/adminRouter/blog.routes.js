@@ -2,7 +2,7 @@ const { Router } = require('express');
 const { BlogController } = require('../../http/controllers/adminControllers/blog.controller');
 const { imageUploader } = require('../../utils/multer/image.uploader');
 const { stringToArray } = require('../../http/middlewares/stringToArray');
-const blogRouter = Router();
+const adminBlogRouter = Router();
 
 /**
  * @swagger
@@ -20,7 +20,7 @@ const blogRouter = Router();
  *              properties:
  *                  title:
  *                      type: string
- *                      description: Title of category
+ *                      description: Title of blog
  *                  brief_text:
  *                      type: string
  *                      description: Brief text of blog
@@ -48,7 +48,7 @@ const blogRouter = Router();
  *          200:
  *              description: Success
  */
-blogRouter.get('/', BlogController.getAllBlogs);
+adminBlogRouter.get('/', BlogController.getAllBlogs);
 
 /**
  * @swagger
@@ -68,7 +68,7 @@ blogRouter.get('/', BlogController.getAllBlogs);
  *          400:
  *              description: Bad request
  */
-blogRouter.post('/add', [imageUploader.single('image'), stringToArray('tags')], BlogController.addBlog);
+adminBlogRouter.post('/add', [imageUploader.single('image'), stringToArray('tags')], BlogController.addBlog);
 
 /**
  * @swagger
@@ -85,7 +85,7 @@ blogRouter.post('/add', [imageUploader.single('image'), stringToArray('tags')], 
  *          200:
  *              description: Success
  */
-blogRouter.get('/:id', BlogController.getBlogById);
+adminBlogRouter.get('/:id', BlogController.getBlogById);
 
 /**
  * @swagger
@@ -102,7 +102,7 @@ blogRouter.get('/:id', BlogController.getBlogById);
  *          200:
  *              description: Success
  */
-blogRouter.delete('/:id', BlogController.deleteBlogById);
+adminBlogRouter.delete('/:id', BlogController.deleteBlogById);
 
 /**
  * @swagger
@@ -128,8 +128,8 @@ blogRouter.delete('/:id', BlogController.deleteBlogById);
  *          201:
  *              description: Success
  */
-blogRouter.patch('/update/:id', [imageUploader.single('image'), stringToArray('tags')], BlogController.updateBlogById);
+adminBlogRouter.patch('/update/:id', [imageUploader.single('image'), stringToArray('tags')], BlogController.updateBlogById);
 
 module.exports = {
-    blogRouter,
+    adminBlogRouter,
 }

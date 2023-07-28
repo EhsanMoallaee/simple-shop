@@ -1,6 +1,6 @@
 const { Router } = require('express');
 const { CategoryController } = require('../../http/controllers/adminControllers/category.controller');
-const categoryRouter = Router();
+const adminCategoryRouter = Router();
 
 /**
  * @swagger
@@ -38,7 +38,7 @@ const categoryRouter = Router();
  *          201:
  *              description: Success
  */
-categoryRouter.post('/add', CategoryController.addCategory);
+adminCategoryRouter.post('/add', CategoryController.addCategory);
 
 /**
  * @swagger
@@ -50,7 +50,7 @@ categoryRouter.post('/add', CategoryController.addCategory);
  *          200:
  *              description: Success
  */
-categoryRouter.get('/root-categories', CategoryController.getAllRootCategories);
+adminCategoryRouter.get('/root-categories', CategoryController.getAllRootCategories);
 
 /**
  * @swagger
@@ -67,7 +67,7 @@ categoryRouter.get('/root-categories', CategoryController.getAllRootCategories);
  *          200:
  *              description: Success
  */
-categoryRouter.get('/children/:parent', CategoryController.getChildrenOfCategory);
+adminCategoryRouter.get('/children/:parent', CategoryController.getChildrenOfCategory);
 
 /**
  * @swagger
@@ -79,7 +79,7 @@ categoryRouter.get('/children/:parent', CategoryController.getChildrenOfCategory
  *          200:
  *              description: Success
  */
-categoryRouter.get('/all', CategoryController.getAllCategories);
+adminCategoryRouter.get('/all', CategoryController.getAllCategories);
 
 /**
  * @swagger
@@ -98,7 +98,7 @@ categoryRouter.get('/all', CategoryController.getAllCategories);
  *          404:
  *              description: Category not found
  */
-categoryRouter.delete('/remove/:id', CategoryController.removeCategory);
+adminCategoryRouter.delete('/remove/:id', CategoryController.removeCategory);
 
 /**
  * @swagger
@@ -112,7 +112,7 @@ categoryRouter.delete('/remove/:id', CategoryController.removeCategory);
  *          404:
  *              description: Category not found
  */
-categoryRouter.get('/list-of-all', CategoryController.getAllCategoriesWithoutPopulate);
+adminCategoryRouter.get('/list-of-all', CategoryController.getAllCategoriesWithoutPopulate);
 
 /**
  * @swagger
@@ -131,7 +131,7 @@ categoryRouter.get('/list-of-all', CategoryController.getAllCategoriesWithoutPop
  *          404:
  *              description: Category not found
  */
-categoryRouter.get('/:id', CategoryController.getCategoryById);
+adminCategoryRouter.get('/:id', CategoryController.getCategoryById);
 
 /**
  * @swagger
@@ -159,8 +159,8 @@ categoryRouter.get('/:id', CategoryController.getCategoryById);
  *          404:
  *              description: Category not found
  */
-categoryRouter.patch('/update/:id', CategoryController.updateCategory);
+adminCategoryRouter.patch('/update/:id', CategoryController.updateCategory);
 
 module.exports = {
-    categoryRouter,
+    adminCategoryRouter,
 }
