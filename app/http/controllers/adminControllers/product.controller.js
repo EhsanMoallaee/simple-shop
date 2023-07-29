@@ -1,10 +1,12 @@
 const createError = require("http-errors");
 const { ProductModel } = require("../../../models/product.model");
-const { addProductValidator } = require("../../validators/admin/product/product.validator");
+const { addProductValidator, updateProductValidator } = require("../../validators/admin/product/product.validator");
 const Controller = require("../controller");
 const { deleteFileFromPublic } = require("../../../utils/deleteFileFromPublic");
 const { PRODUCT_TYPES } = require("../../../utils/constants");
 const { objectIDValidator } = require("../../validators/publicValidators/objectID.validator");
+const { deepCopyOfAnObject } = require("../../../utils/deepCopyOfAnObject");
+const { productUpdateDataAssignValues } = require("../../../utils/product/productUpdateDataAssignValues");
 
 class ProductController extends Controller {
 
@@ -27,8 +29,8 @@ class ProductController extends Controller {
             }
         }
         if(!req.images || req?.images.length == 0) return next(createError.BadRequest('Uploading at least one image is required'))
-        req.image = req?.images ? req.images[0] : null;
-        const productData = { ...req.body, image: req?.image, gallery_images: req?.images, features }
+        let image = req?.images ? req.images[0] : null;
+        const productData = { ...req.body, image, gallery_images: req?.images, features }
         const product = await ProductModel.create(productData);
         if(!product) {
             deleteFileFromPublic(req.image);
@@ -84,7 +86,37 @@ class ProductController extends Controller {
 
     }
 
-    updateProduct = async(req, res, next) => {}
+    updateProduct = async(req, res, next) => {
+        const { id } = req.params;
+        let { error: objectIDError } = objectIDValidator({id});
+        if(objectIDError) {
+            deleteFileFromPublic(req.image);
+            return next(createError.BadRequest(objectIDError.message));
+        }
+        let { error } = updateProductValidator(req.body);
+        if(error) {
+            console.log(error);
+            deleteFileFromPublic(req.image);
+            return next(createError.BadRequest(error.message));
+        }        
+        const product = await ProductModel.findById(id);
+        if(!product) return next(createError.NotFound('Product not found'));
+        const data = deepCopyOfAnObject(req.body);
+        if(req.files.length > 0) {
+            data.image = req?.images ? req.images[0] : product.image;
+            data.gallery_images = req?.images ? req.images : (product.gallery_images?? null);
+        }
+        const updateData = productUpdateDataAssignValues(data, product);
+        const updateProduct = await ProductModel.findOneAndUpdate({ _id : id}, updateData, {new: true});
+        return res.status(200).json({
+            statusCode: 200,
+            success: true,
+            message: 'Product updated successfully',
+            data: {
+                updateProduct
+            }
+        })
+    }
 
     removeProduct = async(req, res, next) => {
         const { id } = req.params;

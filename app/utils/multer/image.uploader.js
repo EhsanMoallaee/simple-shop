@@ -16,6 +16,7 @@ function createAddress(req) {
 
 function fileFilter(req, file, cb) {
     if (
+        file.mimetype === 'image/webp' ||
         file.mimetype === 'image/jpeg' ||
         file.mimetype === 'image/jpg' ||
         file.mimetype === 'image/png' ||
@@ -27,7 +28,7 @@ function fileFilter(req, file, cb) {
         return cb ("WrongImageFileFormat", false);
     }    
 }
-let imageArray = [];
+let imagesArray = [];
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
         if(file?.fieldname){
@@ -41,8 +42,8 @@ const storage = multer.diskStorage({
         if(file?.originalname) {
             let originalname = file.originalname.replace(/[^A-Za-z0-9.]/g, "-");
             const filename = "img" + Date.now() + "-" + originalname;            
-            imageArray.push(req.filePath + '/' + filename);
-            req.images = imageArray;
+            imagesArray.push(req.filePath + '/' + filename);
+            req.images = imagesArray;
             return cb(null, filename);
         }
         cb(null, null);
