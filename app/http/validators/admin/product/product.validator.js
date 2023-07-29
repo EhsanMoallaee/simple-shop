@@ -26,7 +26,7 @@ function addProductValidator(data) {
             'array.max': 'Tags array can\'t have more than 20 members',
         }),
         category: myJoiObjectId().messages({
-            'any.only': `missing field {{#label}}`
+            'any.only': 'Wrong object id'
         }),
         supplier: Joi.string().trim().messages({
             'string.empty': 'Supplier can not be empty',
@@ -58,6 +58,18 @@ function addProductValidator(data) {
         weigth: Joi.number().allow('', 0).positive().max(50000).messages({
             'number.positive': 'Weigth number should be positive number',
             'number.max': 'Weigth number should be lower than 50,000'
+        }),
+        made_in: Joi.string().min(0).max(30).trim().messages({
+            'string.max': 'Made_in length must be less than or equal to {{#limit}} characters long',
+            'string.min': 'Made_in length must be at least {{#limit}} characters long',
+        }),
+        colors: Joi.array().max(20).items(
+            Joi.string().messages({
+              'string.empty': 'Tag title is required'
+            })
+          ).messages({
+            'array.base': 'Colors type must be an array (wrong type)',
+            'array.max': 'Colors array can\'t have more than 20 members',
         }),
         gallery_images: Joi.allow(null)
     })

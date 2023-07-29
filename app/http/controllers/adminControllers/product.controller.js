@@ -4,6 +4,7 @@ const { addProductValidator } = require("../../validators/admin/product/product.
 const Controller = require("../controller");
 const { deleteFileFromPublic } = require("../../../utils/deleteFileFromPublic");
 const { PRODUCT_TYPES } = require("../../../utils/constants");
+const { objectIDValidator } = require("../../validators/publicValidators/objectID.validator");
 
 class ProductController extends Controller {
 
@@ -21,6 +22,8 @@ class ProductController extends Controller {
                 length: req.body.length ? Number(req.body.length) : 0,
                 width: req.body.width ? Number(req.body?.width) : 0,
                 weigth: req.body.weigth ? Number(req.body.weigth) : 0,
+                made_in: req.body.made_in ? req.body.made_in : undefined,
+                colors: req.body.colors ? (req.body.colors) : undefined,
             }
         }
         if(!req.images || req?.images.length == 0) return next(createError.BadRequest('Uploading at least one image is required'))
@@ -42,12 +45,17 @@ class ProductController extends Controller {
     }
 
     getAllProducts = async(req, res, next) => {
-        const products = await ProductModel.find();
-        if(!products) {
+        const search = req?.query?.search;
+        const query = {
+            $text: { $search: new RegExp(search, 'ig') }
+        }
+        const searchQuery = search ? query : {};
+        const products = await ProductModel.find(searchQuery).lean();
+        if(!products || products.length == 0) {
             return next(createError.NotFound('Product not found'));
         }
         return res.status(200).json({
-            statusCode: 201,
+            statusCode: 200,
             success: true,
             message: 'Product found successfully',
             data: {
@@ -56,9 +64,41 @@ class ProductController extends Controller {
         })
     }
 
+    getProductById = async(req, res, next) => {
+        const { productId } = req.params;
+        const { error } = objectIDValidator({id: productId});
+        if(error) {
+            console.log(error);
+            return next(createError.BadRequest(error.message));
+        }
+        const product = await ProductModel.findById(productId, {__v: 0});
+        if(!product) return next(createError.NotFound('Product not found'));
+        return res.status(200).json({
+            statusCode: 200,
+            success: true,
+            message: 'Product found successfully',
+            data: {
+                product
+            }
+        })
+
+    }
+
     updateProduct = async(req, res, next) => {}
-    removeProduct = async(req, res, next) => {}
-    getProductById = async(req, res, next) => {}
+
+    removeProduct = async(req, res, next) => {
+        const { id } = req.params;
+        const product = await ProductModel.findById(id);
+        if(!product) return next(createError.NotFound('Product not found'));
+        // Need to develope -> check product state
+        const deleteResult = await ProductModel.findByIdAndDelete(id);
+        if(!deleteResult) return next(createError.InternalServerError('Internal server error occured'));
+        return res.status(200).json({
+            statusCode: 200,
+            success: true,
+            message: 'Product deleted successfully'
+        })
+    }
 }
 
 module.exports = {

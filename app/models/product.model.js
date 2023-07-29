@@ -7,7 +7,7 @@ const productSchema = new mongoose.Schema({
     text: { type: String, required: true },
     image: { type: String, required: true },
     gallery_images: { type: [String] },
-    tags: { type: [String], ref: 'tags', default: [] },
+    tags: { type: [String], default: [] },
     category: { type: mongoose.Types.ObjectId, ref: 'category', required: true },
     comments: { type: [commentSchema], default: [] },
     likes: { type: [mongoose.Types.ObjectId], default: [] },
@@ -27,12 +27,12 @@ const productSchema = new mongoose.Schema({
             width: { type: Number, default: undefined },
             weight: { type: Number, default: undefined },
             colors: [{ type: String, default: undefined }],
-            model: [{ type: String, default: undefined }],
             made_in: { type: String, default: undefined }
         }
     },
 });
 
+productSchema.index({ title: 'text', brief_text: 'text', text: 'text' });
 module.exports = {
     ProductModel: mongoose.model('product', productSchema)
 }

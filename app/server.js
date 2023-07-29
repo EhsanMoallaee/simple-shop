@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const createError = require('http-errors');
+const helmet = require('helmet');
 const morgan = require('morgan');
 const path = require("path");
 const swaggerUI = require('swagger-ui-express');
@@ -24,6 +25,7 @@ module.exports = class Application {
     }
 
     configApplication = () => {
+        this.#app.use(helmet());
         this.#app.use(morgan('dev'));
         this.#app.use(express.urlencoded({ extended: true }));
         this.#app.use(express.json());
@@ -88,8 +90,8 @@ module.exports = class Application {
         });
 
         this.#app.use((err, req, res, next) => {
-            // console.log(err);
-            // console.log('-------------------------------------');
+            console.log(err);
+            console.log('-------------------------------------');
             console.log(err.message);
             const serverError = createError.InternalServerError('Internal server error occured')
             const statusCode = err.status || serverError.statusCode;

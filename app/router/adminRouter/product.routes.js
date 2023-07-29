@@ -65,6 +65,16 @@ const adminProductRouter = Router();
  *                  weigth:
  *                      type: integer
  *                      description: weigth of product (Gram)
+ *                  made_in:
+ *                      type: string
+ *                      description: weigth of product (Gram)
+ *                  colors:
+ *                      type: array
+ *                      items:
+ *                          type: string
+ *                          enum: ['Red', 'Green', 'Black', 'White', 'Blue', 'Yellow', 'Brown']
+ *                      explode: false
+ *                      description: weigth of product (Gram)
  *                  gallery_images:
  *                      type: array
  *                      items: 
@@ -72,10 +82,6 @@ const adminProductRouter = Router();
  *                          format: binary
  *                      description: Gallery images of product at least one image is required
 */
-
-//  *                  image:
-//  *                      type: file
-//  *                      description: Main image of product
 
 /**
  * @swagger
@@ -93,7 +99,7 @@ const adminProductRouter = Router();
  *          201:
  *              description: Success
  */
-adminProductRouter.post('/add', [imageUploader.array('gallery_images', 10), stringToArray('tags')], ProductController.addProduct);
+adminProductRouter.post('/add', [imageUploader.array('gallery_images', 10), stringToArray('tags'), stringToArray('colors')], ProductController.addProduct);
 
 /**
  * @swagger
@@ -101,11 +107,55 @@ adminProductRouter.post('/add', [imageUploader.array('gallery_images', 10), stri
  *  get:
  *      tags: [-Product]
  *      summary: Get all Products
+ *      parameters:
+ *          -   in: query
+ *              name: search
+ *              type: string
  *      responses:
  *          200:
  *              description: Success
+ *          400:
+ *              description: Failed to find product
  */
 adminProductRouter.get('/list', ProductController.getAllProducts);
+
+/**
+ * @swagger
+ * /admin/products/{productId}:
+ *  get:
+ *      tags: [-Product]
+ *      summary: Get one Product by id
+ *      parameters:
+ *          -   name: productId
+ *              in: path
+ *              required: true
+ *              type: string
+ *      responses:
+ *          200:
+ *              description: Success
+ *          400:
+ *              description: Failed to find product
+ */
+adminProductRouter.get('/:productId', ProductController.getProductById);
+
+/**
+ * @swagger
+ * /admin/products/remove/{id}:
+ *  delete:
+ *      tags: [-Product]
+ *      summary: Delete one Product by id
+ *      parameters:
+ *          -   name: id
+ *              in: path
+ *              required: true
+ *              type: string
+ *      responses:
+ *          200:
+ *              description: Success
+ *          400:
+ *              description: Failed to find product
+ */
+adminProductRouter.delete('/remove/:id', ProductController.removeProduct);
 
 
 module.exports = {

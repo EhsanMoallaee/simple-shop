@@ -13,7 +13,7 @@ function createAddress(req) {
     req.filePath = imagePath.replace(/\\/g, '/');
     return directory;
 }
-let imageArray = [];
+
 function fileFilter(req, file, cb) {
     if (
         file.mimetype === 'image/jpeg' ||
@@ -27,7 +27,7 @@ function fileFilter(req, file, cb) {
         return cb ("WrongImageFileFormat", false);
     }    
 }
-
+let imageArray = [];
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
         if(file?.fieldname){
