@@ -81,7 +81,11 @@ module.exports = class Application {
     }
 
     createRoutes = () => {
-        this.#app.use(router);
+        this.#app.use(router, async (err, req, res, next) => {
+            if(err) {
+                next(err)
+            }
+        });
     }
 
     errorHandling = () => {
@@ -99,6 +103,7 @@ module.exports = class Application {
             return res.status(statusCode).json({
                 error: {
                     statusCode,
+                    success: false,
                     message
                 }
             })

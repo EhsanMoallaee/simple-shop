@@ -6,6 +6,9 @@
  *          Chapters_SubSchema:
  *              type: object
  *              properties:
+ *                  _id: 
+ *                      type: string
+ *                      example: "64c707a881378b68169f344c"
  *                  title: 
  *                      type: string
  *                      example: "title of chapter"

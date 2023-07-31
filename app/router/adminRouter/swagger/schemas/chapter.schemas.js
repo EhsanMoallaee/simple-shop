@@ -22,3 +22,21 @@
  *                      type: string
  *                      example: text for this chapter
 */
+
+// Info: Update Chapter (title & text) Schema
+/**
+ * @swagger
+ *  components:
+ *      schemas:
+ *          UpdateChapter:
+ *              type: object
+ *              properties:
+ *                  title:
+ *                      type: string
+ *                      example: chapter 1 nodejs api
+ *                      description: title of chapter
+ *                  text:
+ *                      type: string
+ *                      example: text for this chapter
+ *                      description: text (description) of chapter
+*/

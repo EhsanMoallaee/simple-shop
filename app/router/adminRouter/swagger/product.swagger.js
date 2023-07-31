@@ -156,7 +156,7 @@
  * /admin/products/update/{id}:
  *  patch:
  *      tags: [-Product]
- *      summary: Add one Product
+ *      summary: Update one Product
  *      parameters:
  *          - in: path
  *            name: id
