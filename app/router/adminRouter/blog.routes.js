@@ -1,5 +1,5 @@
 const { Router } = require('express');
-const { BlogController } = require('../../http/controllers/adminControllers/blog.controller');
+const { BlogController } = require('../../http/controllers/adminControllers/blog/blog.controller');
 const { imageUploader } = require('../../utils/multer/image.uploader');
 const { stringToArray } = require('../../http/middlewares/stringToArray');
 const adminBlogRouter = Router();

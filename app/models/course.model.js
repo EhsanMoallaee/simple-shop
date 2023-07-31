@@ -1,9 +1,9 @@
 const { default: mongoose } = require("mongoose");
 const { commentSchema } = require("./public.schemas");
 const Episodes = mongoose.Schema({
-    title: { type: String, required: true },
-    text: { type: String, required: true },
-    type: { type: String, enum: ['FREE', 'CASH', 'VIP'], default: 'free' },
+    title: { type: String, required: true, default: 'title' },
+    text: { type: String, required: true, default: 'text' },
+    type: { type: String, enum: ['FREE', 'CASH', 'VIP'], default: 'FREE' },
     time: { type: String, default: '00:00:00' },
 });
 

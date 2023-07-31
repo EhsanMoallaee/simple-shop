@@ -1,12 +1,12 @@
 const createError = require("http-errors");
-const { ProductModel } = require("../../../models/product.model");
-const { addProductValidator, updateProductValidator } = require("../../validators/admin/product/product.validator");
-const Controller = require("../controller");
-const { deleteFilesFromPublic } = require("../../../utils/deleteFilesFromPublic");
-const { PRODUCT_TYPES } = require("../../../utils/constants");
-const { objectIDValidator } = require("../../validators/publicValidators/objectID.validator");
-const { deepCopyOfAnObject } = require("../../../utils/deepCopyOfAnObject");
-const { productUpdateDataAssignValues } = require("../../../utils/product/productUpdateDataAssignValues");
+const { ProductModel } = require("../../../../models/product.model");
+const { addProductValidator, updateProductValidator } = require("../../../validators/admin/product/product.validator");
+const Controller = require("../../controller");
+const { deleteFilesFromPublic } = require("../../../../utils/deleteFilesFromPublic");
+const { PRODUCT_TYPES } = require("../../../../utils/constants");
+const { objectIDValidator } = require("../../../validators/publicValidators/objectID.validator");
+const { deepCopyOfAnObject } = require("../../../../utils/deepCopyOfAnObject");
+const { productUpdateDataAssignValues } = require("../../../../utils/product/productUpdateDataAssignValues");
 
 class ProductController extends Controller {
 
@@ -106,6 +106,9 @@ class ProductController extends Controller {
         }
         const updateData = productUpdateDataAssignValues(data, product);
         const updateProduct = await ProductModel.findOneAndUpdate({ _id : id}, updateData, {new: true});
+        if(!updateProduct) {
+            return next(createError.InternalServerError('Internal server error occured'));
+        }
         return res.status(200).json({
             statusCode: 200,
             success: true,

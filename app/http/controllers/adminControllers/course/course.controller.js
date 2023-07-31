@@ -1,9 +1,9 @@
 const createError = require("http-errors");
-const { CourseModel } = require("../../../models/course.model");
-const Controller = require("../controller");
-const { addCourseValidator } = require("../../validators/admin/course/course.validator");
-const { deleteFilesFromPublic } = require("../../../utils/deleteFilesFromPublic");
-const { objectIDValidator } = require("../../validators/publicValidators/objectID.validator");
+const { CourseModel } = require("../../../../models/course.model");
+const Controller = require("../../controller");
+const { addCourseValidator } = require("../../../validators/admin/course/course.validator");
+const { deleteFilesFromPublic } = require("../../../../utils/deleteFilesFromPublic");
+const { objectIDValidator } = require("../../../validators/publicValidators/objectID.validator");
 
 class CourseController extends Controller {
 
@@ -66,10 +66,9 @@ class CourseController extends Controller {
                 course
             }
         })
-    }
+    }   
 
-    // getAllCourses = (req, res, next) => {}
-    // getAllCourses = (req, res, next) => {}
+    // getAllCourses = async (req, res, next) => {}
 
 }
 
