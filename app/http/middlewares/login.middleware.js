@@ -22,7 +22,7 @@ function verifyAccessToken(req, res, next) {
         })
     } catch (error) {
         console.log(error);
-        return next(createError.Unauthorized('Please login first'));        
+        return next(createError.Unauthorized('Please login first'));
     }
 }
 

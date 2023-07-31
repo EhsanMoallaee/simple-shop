@@ -19,9 +19,9 @@ class UserAuthController extends Controller {
         const result = await this.saveUser(mobile, code);
         if(!result) return next(createError.Unauthorized('Login failed'));
         return res.status(201).json({
+            statusCode: 201,
+            message: 'Verification code sent to your mobile successfully',
             data: {
-                statusCode: 201,
-                message: 'Verification code sent to your mobile successfully',
                 mobile,
                 code
             }
@@ -48,9 +48,9 @@ class UserAuthController extends Controller {
         const accessToken = await signAccessToken(payload);
         const refreshToken = await signRefreshToken(mobile);
         return res.status(200).json({
+            statusCode: 201,
+            message: 'Login successfully',
             data: {
-                statusCode: 201,
-                message: 'Login successfully',
                 accessToken,
                 refreshToken
             }
@@ -63,6 +63,7 @@ class UserAuthController extends Controller {
         const accessToken = await signAccessToken(mobile);
         const newRefreshToken = await signRefreshToken(mobile);
         return res.status(200).json({
+            statusCode: 200,
             data: {
                 accessToken,
                 refreshToken: newRefreshToken

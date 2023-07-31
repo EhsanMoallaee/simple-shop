@@ -59,7 +59,7 @@ module.exports = class Application {
                 },
                 security: [{ BearerAuth : [] }]
             },
-            apis: ['./app/router/*/*.js'],
+            apis: ['./app/router/**/*.js'],
         };
         const specs = swaggerJsDoc(options);
         this.#app.use('/api-doc', swaggerUI.serve, swaggerUI.setup(specs, { explorer: true }));

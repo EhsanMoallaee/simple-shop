@@ -2,21 +2,21 @@ const createError = require("http-errors");
 const { BlogModel } = require("../../../models/blog.model");
 const { addBlogValidator } = require("../../validators/admin/blog/blog.validator");
 const Controller = require("../controller");
-const { deleteFileFromPublic } = require("../../../utils/deleteFileFromPublic");
+const { deleteFilesFromPublic } = require("../../../utils/deleteFilesFromPublic");
 
 class BlogController extends Controller {
 
     addBlog = async(req, res, next) => {
         const { error } = addBlogValidator(req.body);
         if(error) {
-            deleteFileFromPublic(req.image);
+            deleteFilesFromPublic(req.images);
             return next(createError.BadRequest(error.message));
         }
         const author = req.user._id;
         const blogData = { ...req.body, image: req.image, author }
         const blog = await BlogModel.create(blogData);
         if(!blog) {
-            deleteFileFromPublic(req.image);
+            deleteFilesFromPublic(req.images);
             return next(createError.InternalServerError('Internal server error occured'));
         }
         return res.status(201).json({
@@ -108,7 +108,7 @@ class BlogController extends Controller {
     updateBlogById = async(req, res, next) => {
         const { error } = addBlogValidator(req.body);
         if(error) {
-            deleteFileFromPublic(req.image);
+            deleteFilesFromPublic(req.images);
             return next(createError.BadRequest(error.message));
         }
         const { id } = req.params;
@@ -116,7 +116,7 @@ class BlogController extends Controller {
         const blog = await BlogModel.findById(id);
         if(!blog) return next(createError.NotFound('Blog not found'));
         if(!blog.author.equals(author)) {
-            deleteFileFromPublic(req.image);
+            deleteFilesFromPublic(req.images);
             return next(createError.Forbidden('You cant update other author\'s blog'));
         }
         let data = req.body;
@@ -141,7 +141,7 @@ class BlogController extends Controller {
         }
         const updatedBlog = await BlogModel.findByIdAndUpdate(id, {$set: data}, { new: true }).select({__v: 0});
         if(!updatedBlog) {
-            deleteFileFromPublic(req.image);
+            deleteFilesFromPublic(req.images);
             return next(createError.InternalServerError('Internal server error occured'));
         }
         return res.status(200).json({

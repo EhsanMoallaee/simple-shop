@@ -26,7 +26,7 @@ const generalRouter = Router();
  *              description: Not Found
  */
 
-generalRouter.get('/', verifyAccessToken, homeController.indexPage);
+generalRouter.get('/', homeController.indexPage);
 
 module.exports =  {
     generalRouter

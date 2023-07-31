@@ -13,10 +13,10 @@ function addProductValidator(data) {
             'string.min': 'Title length must be at least {{#limit}} characters long',
         }),
         text: Joi.string().trim().messages({
-            'string.empty': 'Title can not be empty',
+            'string.empty': 'Text can not be empty',
         }),
         brief_text: Joi.string().trim().messages({
-            'string.empty': 'Title can not be empty',
+            'string.empty': 'Brief text can not be empty',
         }),
         tags: Joi.array().max(20).items(
             Joi.string().messages({

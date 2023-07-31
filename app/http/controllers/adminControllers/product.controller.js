@@ -2,7 +2,7 @@ const createError = require("http-errors");
 const { ProductModel } = require("../../../models/product.model");
 const { addProductValidator, updateProductValidator } = require("../../validators/admin/product/product.validator");
 const Controller = require("../controller");
-const { deleteFileFromPublic } = require("../../../utils/deleteFileFromPublic");
+const { deleteFilesFromPublic } = require("../../../utils/deleteFilesFromPublic");
 const { PRODUCT_TYPES } = require("../../../utils/constants");
 const { objectIDValidator } = require("../../validators/publicValidators/objectID.validator");
 const { deepCopyOfAnObject } = require("../../../utils/deepCopyOfAnObject");
@@ -14,7 +14,7 @@ class ProductController extends Controller {
         const { error } = addProductValidator(req.body);
         if(error) {
             console.log(error);
-            deleteFileFromPublic(req.image);
+            deleteFilesFromPublic(req.images);
             return next(createError.BadRequest(error.message));
         }
         let features = {}
@@ -32,8 +32,8 @@ class ProductController extends Controller {
         let image = req?.images ? req.images[0] : null;
         const productData = { ...req.body, image, gallery_images: req?.images, features }
         const product = await ProductModel.create(productData);
-        if(!product) {
-            deleteFileFromPublic(req.image);
+        if(!product || !product._id) {
+            deleteFilesFromPublic(req.images);
             return next(createError.InternalServerError('Internal server error occured'));
         }
         return res.status(201).json({
@@ -59,7 +59,6 @@ class ProductController extends Controller {
         return res.status(200).json({
             statusCode: 200,
             success: true,
-            message: 'Product found successfully',
             data: {
                 products
             }
@@ -67,18 +66,17 @@ class ProductController extends Controller {
     }
 
     getProductById = async(req, res, next) => {
-        const { productId } = req.params;
-        const { error } = objectIDValidator({id: productId});
+        const { id } = req.params;
+        const { error } = objectIDValidator({id: id});
         if(error) {
             console.log(error);
             return next(createError.BadRequest(error.message));
         }
-        const product = await ProductModel.findById(productId, {__v: 0});
+        const product = await ProductModel.findById(id, {__v: 0});
         if(!product) return next(createError.NotFound('Product not found'));
         return res.status(200).json({
             statusCode: 200,
             success: true,
-            message: 'Product found successfully',
             data: {
                 product
             }
@@ -90,13 +88,13 @@ class ProductController extends Controller {
         const { id } = req.params;
         let { error: objectIDError } = objectIDValidator({id});
         if(objectIDError) {
-            deleteFileFromPublic(req.image);
+            deleteFilesFromPublic(req.images);
             return next(createError.BadRequest(objectIDError.message));
         }
         let { error } = updateProductValidator(req.body);
         if(error) {
             console.log(error);
-            deleteFileFromPublic(req.image);
+            deleteFilesFromPublic(req.images);
             return next(createError.BadRequest(error.message));
         }        
         const product = await ProductModel.findById(id);
