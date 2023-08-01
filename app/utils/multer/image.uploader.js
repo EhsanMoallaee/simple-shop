@@ -7,9 +7,9 @@ function createAddress(req) {
     const year = date.getFullYear().toString();
     const month = (date.getMonth() + 1).toString();
     const day = date.getDate().toString();
-    const directory = path.join(__dirname, '..', '..', '..', 'public', 'uploads', 'blogs', year, month, day);
+    const directory = path.join(__dirname, '..', '..', '..', 'public', 'uploads', 'image', year, month, day);
     fs.mkdirSync(directory, {recursive: true});
-    const imagePath = path.join('uploads', 'blogs', year, month, day);
+    const imagePath = path.join('uploads', 'image', year, month, day);
     req.filePath = imagePath.replace(/\\/g, '/');
     return directory;
 }

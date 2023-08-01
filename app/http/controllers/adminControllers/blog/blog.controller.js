@@ -1,8 +1,10 @@
 const createError = require("http-errors");
 const { BlogModel } = require("../../../../models/blog.model");
-const { addBlogValidator } = require("../../../validators/admin/blog/blog.validator");
+const { addBlogValidator, updateBlogValidator } = require("../../../validators/admin/blog/blog.validator");
 const Controller = require("../../controller");
 const { deleteFilesFromPublic } = require("../../../../utils/deleteFilesFromPublic");
+const { deepCopyOfAnObject } = require("../../../../utils/deepCopyOfAnObject");
+const { deleteNullsFromObjects } = require("../../../../utils/deleteNullsFromObject");
 
 class BlogController extends Controller {
 
@@ -13,7 +15,7 @@ class BlogController extends Controller {
             return next(createError.BadRequest(error.message));
         }
         const author = req.user._id;
-        const blogData = { ...req.body, image: req.image, author }
+        const blogData = { ...req.body, image: req.images[0], author };
         const blog = await BlogModel.create(blogData);
         if(!blog) {
             deleteFilesFromPublic(req.images);
@@ -22,10 +24,7 @@ class BlogController extends Controller {
         return res.status(201).json({
             statusCode: 201,
             success: true,
-            message: 'Blog created successfully',
-            data: {
-                blog
-            }
+            message: 'Blog created successfully'
         })
     }
 
@@ -92,8 +91,6 @@ class BlogController extends Controller {
         });
     }
 
-    getCommentsOfBlog = async(req, res, next) => {}
-
     deleteBlogById = async(req, res, next) => {
         const { id } = req.params;
         const result = await BlogModel.findByIdAndDelete(id);
@@ -106,38 +103,26 @@ class BlogController extends Controller {
     }
 
     updateBlogById = async(req, res, next) => {
-        const { error } = addBlogValidator(req.body);
+        const { id } = req.params;
+        const author = req.user._id;
+        const { error } = updateBlogValidator(req.body);
         if(error) {
+            console.log(error);
             deleteFilesFromPublic(req.images);
             return next(createError.BadRequest(error.message));
         }
-        const { id } = req.params;
-        const author = req.user._id;
+        let data = deepCopyOfAnObject(req.body)
+        let blackListFields = ['_id', 'author', 'likes', 'dislikes', 'bookmarks', 'comments'];
+        deleteNullsFromObjects(data, blackListFields);
+
         const blog = await BlogModel.findById(id);
         if(!blog) return next(createError.NotFound('Blog not found'));
         if(!blog.author.equals(author)) {
             deleteFilesFromPublic(req.images);
             return next(createError.Forbidden('You cant update other author\'s blog'));
         }
-        let data = req.body;
-        let nullishData = ['', ' ', null, undefined, 0, '0'];
-        let blackListData = ['author', 'likes', 'dislikes', 'bookmarks', 'comments'];
-        Object.keys(data).forEach(key => {
-            if(blackListData.includes(data[key])) {
-                delete data[key]
-            }
-            if(typeof data[key] === "string") {
-                data[key] = data[key].trim();
-            }
-            if(Array.isArray(data[key]) && data[key].length > 0) {
-                data[key] = data[key].map(val => val.trim());
-            }
-            if(nullishData.includes(data[key])) {
-                delete data[key]
-            }
-        })
-        if(req?.image) {
-            data = { ...req.body, image: req?.image }
+        if(req?.images && req?.images?.length > 0) {
+            data = { ...data, image: req.images[0] }
         }
         const updatedBlog = await BlogModel.findByIdAndUpdate(id, {$set: data}, { new: true }).select({__v: 0});
         if(!updatedBlog) {
@@ -147,12 +132,11 @@ class BlogController extends Controller {
         return res.status(200).json({
             statusCode: 200,
             success: true,
-            message: 'Blog updated successfully',
-            data: {
-                updatedBlog
-            }
+            message: 'Blog updated successfully'
         })
     }
+    // ToDo: After comment routes and controller done
+    getCommentsOfBlog = async(req, res, next) => {}
 
 }
 

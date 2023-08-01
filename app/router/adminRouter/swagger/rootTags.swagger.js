@@ -2,8 +2,9 @@
  * @swagger
  * tags:
  *   -  name: AdminPanel
- *   -  name: -Chapter
  *   -  name: -Course
+ *   -  name: -Chapter
+ *   -  name: -Episode
  *   -  name: -Product
  *   -  name: -Category
  *   -  name: -Blog

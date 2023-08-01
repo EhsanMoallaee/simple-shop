@@ -18,7 +18,7 @@ class ChapterController extends Controller {
         if(!course) return next(createError.NotFound('Course not found'));
         const updatedCourse = await CourseModel.findByIdAndUpdate(
             { _id : id },
-            { $push: { chapters : { title, text, episodes: [] } } },
+            { $push: { chapters : { title, text } } },
             { new: true }
         );
         if(!updatedCourse) {

@@ -10,7 +10,13 @@ class CourseController extends Controller {
     getAllCourses = async (req, res, next) => {
         const { search } = req.query;
         const searchQuery = search ? { $text: { $search: new RegExp(search, 'ig')}} : {};
-        const courses = await CourseModel.find(searchQuery).sort({ _id: -1}).lean();
+        const courses = await CourseModel.find(searchQuery)
+        .populate([
+            { path: 'category', select: {title: 1}},
+            { path: 'teacher', select: {first_name: 1, last_name: 1, mobile: 1, email: 1}},
+        ])
+        .sort({ _id: -1})
+        .lean();
         if(!courses || courses.length == 0) return next(createError.NotFound('Course not found'))
         return res.status(200).json({
             statusCode: 200,
@@ -67,8 +73,6 @@ class CourseController extends Controller {
             }
         })
     }   
-
-    // getAllCourses = async (req, res, next) => {}
 
 }
 
