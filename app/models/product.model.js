@@ -1,4 +1,5 @@
 const { default: mongoose } = require("mongoose");
+const mongooseLeanVirtuals = require('mongoose-lean-virtuals');
 const { commentSchema } = require("./public.schemas");
 
 const productSchema = new mongoose.Schema({
@@ -30,9 +31,13 @@ const productSchema = new mongoose.Schema({
             made_in: { type: String, default: undefined }
         }
     },
-});
+}, { timestamps: true, toJSON: { virtuals: true }});
 
+productSchema.plugin(mongooseLeanVirtuals);
 productSchema.index({ title: 'text', brief_text: 'text', text: 'text' });
+productSchema.virtual('imageURLs').get(function() {
+    return this.gallery_images.map(img => `${process.env.BASE_URL}:${process.env.PORT}/${img}`)
+});
 module.exports = {
     ProductModel: mongoose.model('product', productSchema)
 }

@@ -79,6 +79,12 @@ class BlogController extends Controller {
                     'author.__v': 0,
                     'category.__v': 0,
                 }
+            },
+            {
+                $addFields: { 
+                    imageURL:
+                        { $concat: [ process.env.BASE_URL, process.env.PORT, "$image" ] } 
+                    }
             }
         ]);
         if(!blogs || blogs.length == 0) return next(createError.NotFound('Blog not found'));

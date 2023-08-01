@@ -72,7 +72,6 @@ blogSchema.virtual('category_detail', {
 //     this.populate([{path: 'user', select: {__v: 0, id: 0}}]);
 //     next();
 // }
-
 module.exports = {
     BlogModel: mongoose.model('blog', blogSchema)
 }

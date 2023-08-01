@@ -52,7 +52,7 @@ class ProductController extends Controller {
             $text: { $search: new RegExp(search, 'ig') }
         }
         const searchQuery = search ? query : {};
-        const products = await ProductModel.find(searchQuery).lean();
+        const products = await ProductModel.find(searchQuery).lean({ virtuals: true});
         if(!products || products.length == 0) {
             return next(createError.NotFound('Product not found'));
         }
