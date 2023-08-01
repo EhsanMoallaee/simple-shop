@@ -64,14 +64,6 @@ blogSchema.virtual('category_detail', {
     foreignField: 'category',
 });
 
-// blogSchema
-// .pre('findOne', autoPopulate)
-// .pre('find', autoPopulate)
-
-// function autoPopulate(next) {
-//     this.populate([{path: 'user', select: {__v: 0, id: 0}}]);
-//     next();
-// }
 module.exports = {
     BlogModel: mongoose.model('blog', blogSchema)
 }

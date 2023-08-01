@@ -1,6 +1,7 @@
 const { default: mongoose } = require("mongoose");
 const mongooseLeanVirtuals = require('mongoose-lean-virtuals');
 const { commentSchema } = require("./public.schemas");
+const { calculateCourseTime } = require("../utils/course/calculateCourseTime");
 
 const Episodes = mongoose.Schema({
     title: { type: String, required: true },
@@ -34,7 +35,6 @@ const courseSchema = new mongoose.Schema({
     discount: { type: Number, default: 0 },
     type: { type: String, required: true, enum: ['FREE', 'CASH', 'VIP'], default: 'FREE' },
     status: { type: String, required: true, enum: ['not_started', 'completed', 'on_performing'], default: 'not_started' },
-    time: { type: String, default: '00:00:00' },
     teacher: { type: mongoose.Types.ObjectId, ref: 'user', required: true },
     chapters: { type: [Chapter], default: [] },
     students: { type: [mongoose.Types.ObjectId], ref: 'user', default: [] },
@@ -44,6 +44,9 @@ courseSchema.plugin(mongooseLeanVirtuals);
 courseSchema.index({title: 'text', brief_text: 'text', text: 'text'});
 courseSchema.virtual('imageURL').get(function() {
     return `${process.env.BASE_URL}:${process.env.PORT}/${this.image}`
+});
+courseSchema.virtual('totalTime').get(function() {
+    return calculateCourseTime(this.chapters)
 });
 
 module.exports = {

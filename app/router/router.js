@@ -1,8 +1,8 @@
 const { Router } = require('express');
-const { generalRouter } = require('./generalRouter/index.routes');
+const { adminRouter } = require('./adminRouter/admin.routes');
 const { authRouter } = require('./userRouter/auth.routes');
 const { developerRouter } = require('./developerRouter/developer.routes');
-const { adminRouter } = require('./adminRouter/admin.routes');
+const { generalRouter } = require('./generalRouter/index.routes');
 const { verifyAccessToken, checkRole } = require('../http/middlewares/login.middleware');
 const router = Router();
 

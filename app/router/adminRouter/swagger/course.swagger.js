@@ -112,3 +112,43 @@
  *                      schema:
  *                          $ref: '#/definitions/Failed-Response-Server-Error'
  */
+
+// Info: Update Course:
+/**
+ * @swagger
+ * /admin/courses/update/{id}:
+ *  patch:
+ *      tags: [-Course]
+ *      summary: Update one course
+ *      parameters:
+ *          -   in: path
+ *              name: id
+ *              type: string
+ *              required: true
+ *              description: Course Id
+ *      requestBody:
+ *          required: true
+ *          content:
+ *              multipart/form-data:
+ *                  schema:
+ *                      $ref: '#/components/schemas/UpdateCourse'
+ *      responses:
+ *          201:
+ *              description: Success
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          $ref: '#/definitions/Success-Response-Without-Data'
+ *          400:
+ *              description: Bad request
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          $ref: '#/definitions/Failed-Response-Client-Error'
+ *          500:
+ *              description: Internal server error
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          $ref: '#/definitions/Failed-Response-Server-Error'
+ */

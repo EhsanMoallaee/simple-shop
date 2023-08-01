@@ -1,10 +1,10 @@
 const { Router } = require('express');
-const { adminCategoryRouter } = require('./category.routes');
 const { adminBlogRouter } = require('./blog.routes');
-const { adminProductRouter } = require('./product.routes');
-const { adminCourseRouter } = require('./course.routes');
+const { adminCategoryRouter } = require('./category.routes');
 const { adminChapterRouter } = require('./chapter.routes');
+const { adminCourseRouter } = require('./course.routes');
 const { adminEpisodeRouter } = require('./episode.routes');
+const { adminProductRouter } = require('./product.routes');
 const adminRouter = Router();
 
 adminRouter.use('/category', adminCategoryRouter);

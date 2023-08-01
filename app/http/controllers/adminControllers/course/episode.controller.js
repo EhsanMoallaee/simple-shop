@@ -1,15 +1,13 @@
-const Controller = require("../../controller");
 const createError = require("http-errors");
-const { default: getVideoDurationInSeconds } = require("get-video-duration");
 const { default: mongoose } = require("mongoose");
-const path = require("path");
-
+const { default: getVideoDurationInSeconds } = require("get-video-duration");
+const Controller = require("../../controller");
 const { CourseModel } = require("../../../../models/course.model");
 const { addEpisodeValidator, updateEpisodeValidator } = require("../../../validators/admin/course/episode.validator");
 const { deleteFilesFromPublic } = require("../../../../utils/deleteFilesFromPublic");
 const { deleteNullsFromObjects } = require("../../../../utils/deleteNullsFromObject");
 const { objectIDValidator } = require("../../../validators/publicValidators/objectID.validator");
-const { secondsToTimeFormat } = require("../../../../utils/multer/secondsToTimeFormat");
+const { secondsToTimeFormat } = require("../../../../utils/secondsToTimeFormat");
 
 class EpisodeController extends Controller {
 
@@ -84,10 +82,10 @@ class EpisodeController extends Controller {
         const { episodeId } = req.params;
         let { error } = updateEpisodeValidator(req.body);
         let { error: objectIdError } = objectIDValidator({id: episodeId});
-        if(error || objectIdError) {
-            console.log(error);
+        if(objectIdError || error) {
+            console.log(error?.message || objectIdError?.message);
             deleteFilesFromPublic(req.video);
-            return next(createError.BadRequest(error.message));
+            return next(createError.BadRequest({dataError : error?.message, idError: objectIdError?.message}));
         }
         let time = null;
         let video = null;

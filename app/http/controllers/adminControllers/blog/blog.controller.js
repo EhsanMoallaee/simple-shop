@@ -1,9 +1,9 @@
 const createError = require("http-errors");
 const { BlogModel } = require("../../../../models/blog.model");
-const { addBlogValidator, updateBlogValidator } = require("../../../validators/admin/blog/blog.validator");
 const Controller = require("../../controller");
-const { deleteFilesFromPublic } = require("../../../../utils/deleteFilesFromPublic");
+const { addBlogValidator, updateBlogValidator } = require("../../../validators/admin/blog/blog.validator");
 const { deepCopyOfAnObject } = require("../../../../utils/deepCopyOfAnObject");
+const { deleteFilesFromPublic } = require("../../../../utils/deleteFilesFromPublic");
 const { deleteNullsFromObjects } = require("../../../../utils/deleteNullsFromObject");
 
 class BlogController extends Controller {

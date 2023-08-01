@@ -1,11 +1,11 @@
 const createError = require("http-errors");
+const Controller = require("../../controller");
 const { ProductModel } = require("../../../../models/product.model");
 const { addProductValidator, updateProductValidator } = require("../../../validators/admin/product/product.validator");
-const Controller = require("../../controller");
-const { deleteFilesFromPublic } = require("../../../../utils/deleteFilesFromPublic");
-const { PRODUCT_TYPES } = require("../../../../utils/constants");
-const { objectIDValidator } = require("../../../validators/publicValidators/objectID.validator");
 const { deepCopyOfAnObject } = require("../../../../utils/deepCopyOfAnObject");
+const { deleteFilesFromPublic } = require("../../../../utils/deleteFilesFromPublic");
+const { objectIDValidator } = require("../../../validators/publicValidators/objectID.validator");
+const { PRODUCT_TYPES } = require("../../../../utils/constants");
 const { productUpdateDataAssignValues } = require("../../../../utils/product/productUpdateDataAssignValues");
 
 class ProductController extends Controller {
@@ -87,15 +87,11 @@ class ProductController extends Controller {
     updateProduct = async(req, res, next) => {
         const { id } = req.params;
         let { error: objectIDError } = objectIDValidator({id});
-        if(objectIDError) {
-            deleteFilesFromPublic(req.images);
-            return next(createError.BadRequest(objectIDError.message));
-        }
         let { error } = updateProductValidator(req.body);
-        if(error) {
-            console.log(error);
+        if(objectIDError || error) {
+            console.log(error?.message || objectIDError?.message);
             deleteFilesFromPublic(req.images);
-            return next(createError.BadRequest(error.message));
+            return next(createError.BadRequest({dataError : error?.message, idError: objectIDError?.message}));
         }        
         const product = await ProductModel.findById(id);
         if(!product) return next(createError.NotFound('Product not found'));

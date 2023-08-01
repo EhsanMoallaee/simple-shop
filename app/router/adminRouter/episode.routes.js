@@ -3,7 +3,6 @@ const { EpisodeController } = require('../../http/controllers/adminControllers/c
 const { videoUploader } = require('../../utils/multer/video.uploader');
 const adminEpisodeRouter = Router();
 
-// adminEpisodeRouter.get('/', EpisodeController.getAllEpisodes);
 adminEpisodeRouter.put('/add', [videoUploader.single('video')], EpisodeController.addEpisode);
 adminEpisodeRouter.delete('/remove/:episodeId', EpisodeController.removeEpisode);
 adminEpisodeRouter.patch('/update/:episodeId', [videoUploader.single('video')], EpisodeController.updateEpisode);

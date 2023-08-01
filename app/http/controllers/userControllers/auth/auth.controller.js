@@ -1,11 +1,11 @@
 const createError = require('http-errors');
-const { ROLES } = require('../../../../utils/constants');
+const Controller = require('../../controller');
+const UserModel = require('../../../../models/user.model');
 const { checkOtpValidator } = require('../../../validators/user/checkOtp.validator');
 const { getOtpValidator } = require('../../../validators/user/getOtp.validator');
 const { randomNumber } = require('../../../../utils/fiveDigitsRandomNumber');
-const UserModel = require('../../../../models/user.model');
+const { ROLES } = require('../../../../utils/constants');
 const { signAccessToken, verifyRefreshToken, signRefreshToken } = require('../../../../utils/signAndVerifyToken');
-const Controller = require('../../controller');
 
 class UserAuthController extends Controller {
 

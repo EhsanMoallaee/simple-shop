@@ -1,9 +1,12 @@
 const createError = require("http-errors");
 const { CourseModel } = require("../../../../models/course.model");
 const Controller = require("../../controller");
-const { addCourseValidator } = require("../../../validators/admin/course/course.validator");
+const { addCourseValidator, updateCourseValidator } = require("../../../validators/admin/course/course.validator");
 const { deleteFilesFromPublic } = require("../../../../utils/deleteFilesFromPublic");
 const { objectIDValidator } = require("../../../validators/publicValidators/objectID.validator");
+const { deepCopyOfAnObject } = require("../../../../utils/deepCopyOfAnObject");
+const { deleteNullsFromObjects } = require("../../../../utils/deleteNullsFromObject");
+const { calculateCourseTime } = require("../../../../utils/course/calculateCourseTime");
 
 class CourseController extends Controller {
 
@@ -38,7 +41,7 @@ class CourseController extends Controller {
         const courseData = { ...req.body, image, teacher}
         if(courseData.type == 'FREE' && (courseData.price > 0 || courseData.discount > 0)) {
             deleteFilesFromPublic(req.images);
-            return next(createError.BadRequest('Free type courses cant have price and discount greater than zero'));
+            return next(createError.BadRequest('Free type courses can\'t have price and discount greater than zero'));
         }
         const course = await CourseModel.create(courseData);
         if(!course || !course._id) {
@@ -64,6 +67,7 @@ class CourseController extends Controller {
         }
         const course = await CourseModel.findById(id);
         if(!course) return next(createError.NotFound('Course not found'));
+        course.time = calculateCourseTime(course.chapters);
         return res.status(200).json({
             statusCode: 200,
             success: true,
@@ -71,8 +75,34 @@ class CourseController extends Controller {
                 course
             }
         })
-    }   
+    }
 
+    updateCourse = async (req, res, next) => {
+        const { id } = req.params;
+        let { error: objectIdError } = objectIDValidator({id});
+        let { error } = updateCourseValidator(req.body);
+        if(objectIdError || error) {
+            console.log(error?.message || objectIdError?.message);
+            deleteFilesFromPublic(req.images);
+            return next(createError.BadRequest({dataError : error?.message, idError: objectIdError?.message}));
+        }
+        const course = await CourseModel.findById(id);
+        if(!course) return next(createError.NotFound('Course not found'));
+        const data = deepCopyOfAnObject(req.body);
+        let blackListFields = ['time', 'chapters', 'episodes', 'bookmarks', 'likes', 'dislikes', 'comments']
+        deleteNullsFromObjects(data, blackListFields);
+        if(req.images && req.images.length > 0) {
+            data.image = req.images[0];
+            deleteFilesFromPublic(course.image);
+        }
+        const updatedCourse = await CourseModel.findByIdAndUpdate(id, data, {new: true});
+        if(!updatedCourse) return next(createError.NotFound('Internal server error occured'));
+        return res.status(200).json({
+            statusCode: 200,
+            success: true,
+            message: 'Course updated successfully'
+        });
+    }
 }
 
 module.exports = {

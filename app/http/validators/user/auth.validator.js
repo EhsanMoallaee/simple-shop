@@ -15,14 +15,6 @@ function authValidator(data) {
             'any.required': 'Password is required',
             'string.empty': 'Password can not be empty',
         }),
-        // mobile: Joi.string()
-        // .pattern(/^09[0-9]{9}$/)
-        // .required()
-        // .messages({
-        //     'string.pattern.base': 'Mobile nubmer format is wrong',
-        //     'any.required': 'Mobile is required',
-        //     'string.empty': 'Mobile can not be empty',
-        // }),
     })
     return schema.validate(data);
 }
