@@ -96,7 +96,7 @@ class CourseController extends Controller {
             deleteFilesFromPublic(course.image);
         }
         const updatedCourse = await CourseModel.findByIdAndUpdate(id, {$set: data}, {new: true});
-        if(!updatedCourse) return next(createError.NotFound('Internal server error occured'));
+        if(!updatedCourse) return next(createError.NotFound('Update failed'));
         return res.status(200).json({
             statusCode: 200,
             success: true,

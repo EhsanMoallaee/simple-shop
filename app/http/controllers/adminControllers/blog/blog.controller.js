@@ -117,7 +117,7 @@ class BlogController extends Controller {
             deleteFilesFromPublic(req.images);
             return next(createError.BadRequest(error.message));
         }
-        let data = deepCopyOfAnObject(req.body)
+        let data = deepCopyOfAnObject(req.body);
         let blackListFields = ['_id', 'author', 'likes', 'dislikes', 'bookmarks', 'comments'];
         deleteNullsFromObjects(data, blackListFields);
 
@@ -133,7 +133,7 @@ class BlogController extends Controller {
         const updatedBlog = await BlogModel.findByIdAndUpdate(id, {$set: data}, { new: true }).select({__v: 0});
         if(!updatedBlog) {
             deleteFilesFromPublic(req.images);
-            return next(createError.InternalServerError('Internal server error occured'));
+            return next(createError.InternalServerError('Update failed'));
         }
         return res.status(200).json({
             statusCode: 200,

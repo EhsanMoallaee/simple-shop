@@ -13,6 +13,9 @@
  *                  title:
  *                      type: string
  *                      example: "role title"
+ *                  description:
+ *                      type: string
+ *                      example: "role description"
  *                  permissions:
  *                      type: array
  *                      items:

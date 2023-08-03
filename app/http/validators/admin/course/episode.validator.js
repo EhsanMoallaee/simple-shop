@@ -16,10 +16,10 @@ function addEpisodeValidator(data) {
             'any.only': 'The only acceptable values are : LOCK and UNLOCK'
         }),
         chapterId: myJoiObjectId().messages({
-            'any.only': 'Wrong object id'
+            'string.pattern.name': 'Wrong object id format'
         }),
         courseId: myJoiObjectId().messages({
-            'any.only': 'Wrong object id'
+            'string.pattern.name': 'Wrong object id format'
         }),
     })
     return schema.validate(data);

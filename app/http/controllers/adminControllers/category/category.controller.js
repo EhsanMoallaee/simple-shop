@@ -19,6 +19,7 @@ class CategoryController extends Controller {
             success: true,
             message: 'Category added successfully',
             data: {
+                category
             }
         })
     }
@@ -42,7 +43,7 @@ class CategoryController extends Controller {
             return next(createError.BadRequest(error.message));
         }
         const updateResult = await CategoryModel.findByIdAndUpdate({_id: id}, { $set: {title} }, { new: true }).select({__v: 0});
-        if(!updateResult) return next(createError.NotFound('Category not found'));
+        if(!updateResult) return next(createError.NotFound('Update failed'));
         return res.status(200).json({
             statusCode: 200,
             success: true,

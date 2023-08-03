@@ -85,7 +85,7 @@ class ChapterController extends Controller {
             return next(createError.BadRequest(error.message));
         }
         const chapter = await getOneChapter(chapterId);
-        if(!chapter) return next(createError.NotFound('chapter not found'));  
+        if(!chapter) return next(createError.NotFound('Chapter not found'));  
         let { title, text } = req.body;
         title = (title && title.trim().length > 0) ? title.trim() : chapter.title;
         text = (text && text.trim().length > 0) ? text.trim() : chapter.text;
@@ -96,7 +96,7 @@ class ChapterController extends Controller {
             }
         }
         const updateResult = await CourseModel.updateOne({'chapters._id': chapterId}, updateQuery);
-        if(updateResult.modifiedCount == 0) return next(createError.InternalServerError('Internal server error occured'));
+        if(updateResult.modifiedCount == 0) return next(createError.InternalServerError('Update failed'));
         return res.status(200).json({
             statusCode: 200,
             success: true,

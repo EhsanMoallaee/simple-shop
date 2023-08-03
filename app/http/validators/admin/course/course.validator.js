@@ -26,7 +26,7 @@ function addCourseValidator(data) {
             'array.max': 'Tags array can\'t have more than 20 members',
         }),
         category: myJoiObjectId().messages({
-            'any.only': 'Wrong object id'
+            'string.pattern.name': 'Wrong object id format'
         }),
         price: Joi.number().min(0).max(999999999999).messages({
             'number.min': 'Price number should be equal or greater than zeros',
@@ -61,7 +61,7 @@ function updateCourseValidator(data) {
             'array.max': 'Tags array can\'t have more than 20 members',
         }),
         category: myJoiObjectId().optional().allow(null, '').messages({
-            'any.only': 'Wrong object id'
+            'string.pattern.name': 'Wrong object id format'
         }),
         price: Joi.number().optional().allow(null, '').min(0).max(999999999999).messages({
             'number.min': 'Price number should be equal or greater than zeros',

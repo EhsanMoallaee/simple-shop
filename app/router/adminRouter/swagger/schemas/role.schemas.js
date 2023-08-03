@@ -13,8 +13,12 @@
  *                  title:
  *                      type: string
  *                      description: title of role
+ *                  description:
+ *                      type: string
+ *                      description: description of role
  *                  permissions:
- *                      $ref: '#/components/schemas/Permissions_SubSchema'
+ *                      type: array
+ *                      description: Permission id for this role
 */
 
 // Info: Update Role Schema
@@ -28,6 +32,10 @@
  *                  title:
  *                      type: string
  *                      description: title of role
+ *                  description:
+ *                      type: string
+ *                      description: title of role
  *                  permissions:
- *                      $ref: '#/components/schemas/Permissions_SubSchema'
+ *                      type: array
+ *                      description: Permission id for this role
 */

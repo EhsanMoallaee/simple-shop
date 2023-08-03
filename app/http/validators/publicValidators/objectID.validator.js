@@ -5,7 +5,8 @@ function objectIDValidator(data) {
     const myJoiObjectId = JoiObjectId(Joi);
     const schema = Joi.object({
         id: myJoiObjectId().messages({
-            'any.only': 'Wrong object id'
+            'string.empty': 'ID parameter can not be empty',
+            'string.pattern.name': 'Wrong object id format'
         })
     })
     return schema.validate(data);

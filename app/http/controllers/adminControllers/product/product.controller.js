@@ -50,9 +50,7 @@ class ProductController extends Controller {
         const search = req?.query?.search;
         const searchQuery = search ? { $text: { $search: new RegExp(search, 'ig')}} : {};
         const products = await ProductModel.find(searchQuery).lean({ virtuals: true});
-        if(!products || products.length == 0) {
-            return next(createError.NotFound('Product not found'));
-        }
+        if(!products || products.length == 0) return next(createError.NotFound('Products not found'));
         return res.status(200).json({
             statusCode: 200,
             success: true,
@@ -91,7 +89,10 @@ class ProductController extends Controller {
             return next(createError.BadRequest({dataError : error?.message, idError: objectIDError?.message}));
         }        
         const product = await ProductModel.findById(id);
-        if(!product) return next(createError.NotFound('Product not found'));
+        if(!product)  {
+            deleteFilesFromPublic(req.images);
+            return next(createError.NotFound('Product not found'));
+        }
         const data = deepCopyOfAnObject(req.body);
         if(req.files.length > 0) {
             data.image = req?.images ? req.images[0] : product.image;
@@ -100,7 +101,8 @@ class ProductController extends Controller {
         const updateData = productUpdateDataAssignValues(data, product);
         const updateProduct = await ProductModel.findOneAndUpdate({ _id : id}, updateData, {new: true});
         if(!updateProduct) {
-            return next(createError.InternalServerError('Internal server error occured'));
+            deleteFilesFromPublic(req.images);
+            return next(createError.InternalServerError('Update failed'));
         }
         return res.status(200).json({
             statusCode: 200,
@@ -114,9 +116,14 @@ class ProductController extends Controller {
 
     removeProduct = async(req, res, next) => {
         const { id } = req.params;
+        const { error } = objectIDValidator({id});
+        if(error) {
+            console.log(error);
+            return next(createError.BadRequest(error.message));
+        }
         const product = await ProductModel.findById(id);
         if(!product) return next(createError.NotFound('Product not found'));
-        // Need to develope -> check product state
+        // ToDo: Need to develope -> check product state before deleting
         const deleteResult = await ProductModel.findByIdAndDelete(id);
         if(!deleteResult) return next(createError.InternalServerError('Internal server error occured'));
         return res.status(200).json({

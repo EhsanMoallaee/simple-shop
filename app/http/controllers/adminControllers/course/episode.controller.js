@@ -113,7 +113,7 @@ class EpisodeController extends Controller {
         const updatedCourse = await CourseModel.findOneAndUpdate(findQuery, updateData, { new: true }).select({__v: 0});
         if( !updatedCourse ) {
             deleteFilesFromPublic(req.video);
-            return next(createError.InternalServerError('Internal server error occured'));
+            return next(createError.InternalServerError('Update failed'));
         }
         return res.status(200).json({
             statusCode: 200,

@@ -26,7 +26,7 @@ function addProductValidator(data) {
             'array.max': 'Tags array can\'t have more than 20 members',
         }),
         category: myJoiObjectId().messages({
-            'any.only': 'Wrong object id'
+            'string.pattern.name': 'Wrong object id format'
         }),
         supplier: Joi.string().trim().messages({
             'string.empty': 'Supplier can not be empty',
@@ -65,7 +65,7 @@ function addProductValidator(data) {
         }),
         colors: Joi.array().max(20).items(
             Joi.string().messages({
-              'string.empty': 'Tag title is required'
+              'string.empty': 'Color title is required'
             })
           ).messages({
             'array.base': 'Colors type must be an array (wrong type)',
@@ -95,7 +95,7 @@ function updateProductValidator(data) {
             'array.max': 'Tags array can\'t have more than 20 members',
         }),
         category: myJoiObjectId().allow(null, '').messages({
-            'any.only': 'Wrong object id'
+            'string.pattern.name': 'Wrong object id format'
         }),
         supplier: Joi.string().trim().allow(null, ''),
         price: Joi.number().positive().max(999999999999).allow(null, '').messages({
