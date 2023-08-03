@@ -91,7 +91,7 @@
  *                              example: "red"
  *                      made_in:
  *                          type: string
- *                          example: "name of product's supplier"
+ *                          example: "Germany"
  */
 
 // Info: List Of Products (response format):

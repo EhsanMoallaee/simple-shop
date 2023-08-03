@@ -1,4 +1,5 @@
 const { default: mongoose } = require("mongoose");
+const mongooseLeanVirtuals = require('mongoose-lean-virtuals');
 
 const userSchema = new mongoose.Schema({
     first_name: { type: String, },
@@ -14,6 +15,12 @@ const userSchema = new mongoose.Schema({
     roles: { type: [String], default: ['User'] },
     courses: { type: [mongoose.Types.ObjectId], ref: 'course', default: []}
 }, { timestamps: true, toJSON: { virtuals: true }});
+
+userSchema.plugin(mongooseLeanVirtuals);
+userSchema.index({ first_name: 'text', last_name: 'text', username: 'text', mobile: 'text', email: 'text' });
+// userSchema.virtual('imageURLs').get(function() {
+//     return this.gallery_images.map(img => `${process.env.BASE_URL}:${process.env.PORT}/${img}`)
+// });
 
 const UserModel = mongoose.model('user', userSchema);
 module.exports = UserModel
