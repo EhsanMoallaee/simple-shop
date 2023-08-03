@@ -64,3 +64,13 @@
  *                      type: string
  *                      example: "user@mail.com"
  */
+
+// Info: Permissions subschema
+/**
+ * @swagger
+ *  components:
+ *      schemas:
+ *          Permissions_SubSchema:
+ *              type: string
+ *              enum: ['Blog', 'Course', 'Product']
+ */

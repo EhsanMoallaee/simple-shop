@@ -2,7 +2,7 @@ const { default: mongoose } = require("mongoose");
 
 const roleSchema = new mongoose.Schema({
     title: { type: String, unique: true },
-    permission: { type: [mongoose.Types.ObjectId], ref: 'permission', default: []}
+    permissions: { type: [mongoose.Types.ObjectId], ref: 'permission', default: []}
 }, { 
     timestamps: true, toJSON: { virtuals: true }
 })
