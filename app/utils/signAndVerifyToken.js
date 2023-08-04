@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 const createError = require('http-errors');
-const UserModel = require('../models/user.model');
+const { UserModel } = require('../models/user.model');
 const redisClient = require('./initRedis');
 
 function signAccessToken(payload) {

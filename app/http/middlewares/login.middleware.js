@@ -1,6 +1,6 @@
 const createError = require('http-errors');
 const jwt = require('jsonwebtoken')
-const UserModel = require('../../models/user.model');
+const { UserModel } = require('../../models/user.model');
 
 function getToken(headers) {
     const [bearer, token] = headers?.authorization?.split(' ') || [];
@@ -26,15 +26,6 @@ function verifyAccessToken(req, res, next) {
     }
 }
 
-function checkRole(role) {
-    return function(req, res, next) {
-        const user = req.user;
-        if(user.roles.includes(role)) return next();
-        return next(createError.Forbidden('You haven\'t right to access this route'));
-    }
-}
-
 module.exports = {
     verifyAccessToken,
-    checkRole
 }

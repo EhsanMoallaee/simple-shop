@@ -2,10 +2,10 @@ const createError = require("http-errors");
 const { PermissionModel } = require("../../../../models/permission.model");
 const Controller = require("../../controller");
 const { addPermissionValidator, updatePermissionValidator } = require("../../../validators/admin/RBAC/permission.validator");
-const { findPermissionByTitle } = require("./functions/findPermissionByTitle");
-const { objectIDValidator } = require("../../../validators/publicValidators/objectID.validator");
 const { deepCopyOfAnObject } = require("../../../../utils/deepCopyOfAnObject");
 const { deleteNullsFromObjects } = require("../../../../utils/deleteNullsFromObject");
+const { findPermissionByTitle } = require("./functions/findPermissionByTitle");
+const { objectIDValidator } = require("../../../validators/publicValidators/objectID.validator");
 
 class PermissionController extends Controller {
 

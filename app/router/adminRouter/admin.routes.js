@@ -8,17 +8,55 @@ const { adminProductRouter } = require('./product.routes');
 const { adminUserRouter } = require('./user.routes');
 const { adminPermissionRouter } = require('./permission.routes');
 const { adminRoleRouter } = require('./role.routes');
+const { checkRole } = require('../../http/middlewares/role.guard');
+const { ROLES } = require('../../utils/constants');
 const adminRouter = Router();
 
-adminRouter.use('/category', adminCategoryRouter);
-adminRouter.use('/blogs', adminBlogRouter);
-adminRouter.use('/products', adminProductRouter);
-adminRouter.use('/courses', adminCourseRouter);
-adminRouter.use('/chapters', adminChapterRouter);
-adminRouter.use('/episodes', adminEpisodeRouter);
-adminRouter.use('/users', adminUserRouter);
-adminRouter.use('/permissions', adminPermissionRouter);
-adminRouter.use('/roles', adminRoleRouter);
+adminRouter.use(
+    '/category',
+    checkRole([ROLES.ADMIN]),
+    adminCategoryRouter
+);
+adminRouter.use(
+    '/blogs',
+    checkRole([ROLES.ADMIN, ROLES.TEACHER, ROLES.WRITER]),
+    adminBlogRouter
+);
+adminRouter.use(
+    '/products',
+    checkRole([ROLES.ADMIN, ROLES.SUPPLIER]),
+    adminProductRouter
+);
+adminRouter.use(
+    '/courses',
+    checkRole([ROLES.ADMIN, ROLES.TEACHER]),
+    adminCourseRouter
+);
+adminRouter.use(
+    '/chapters',
+    checkRole([ROLES.ADMIN, ROLES.TEACHER]),
+    adminChapterRouter
+);
+adminRouter.use(
+    '/episodes',
+    checkRole([ROLES.ADMIN, ROLES.TEACHER]),
+    adminEpisodeRouter
+);
+adminRouter.use(
+    '/users',
+    checkRole([ROLES.ADMIN]),
+    adminUserRouter
+);
+adminRouter.use(
+    '/permissions',
+    checkRole([ROLES.SUPERADMIN]),
+    adminPermissionRouter
+);
+adminRouter.use(
+    '/roles',
+    checkRole([ROLES.SUPERADMIN]),
+    adminRoleRouter
+);
 
 module.exports = {
     adminRouter,

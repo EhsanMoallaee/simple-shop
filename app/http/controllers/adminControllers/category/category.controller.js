@@ -3,6 +3,9 @@ const mongoose = require('mongoose');
 const Controller = require("../../controller");
 const { CategoryModel } = require("../../../../models/category.model");
 const { addCategoryValidator, updateCategoryValidator } = require("../../../validators/admin/category/category.validator");
+const { deepCopyOfAnObject } = require("../../../../utils/deepCopyOfAnObject");
+const { deleteNullsFromObjects } = require("../../../../utils/deleteNullsFromObject");
+const { objectIDValidator } = require("../../../validators/publicValidators/objectID.validator");
 
 class CategoryController extends Controller {
 
@@ -11,8 +14,9 @@ class CategoryController extends Controller {
         if(error) {
             return next(createError.BadRequest(error.message));
         }
-        const { title, parent } = req.body;
-        const category = await CategoryModel.create({ title, parent });
+        const data = deepCopyOfAnObject(req.body);
+        deleteNullsFromObjects(data)
+        const category = await CategoryModel.create(data);
         if(!category) return next(createError.InternalServerError('Internal server error occured'));
         return res.status(201).json({
             statusCode: 201,
@@ -37,11 +41,13 @@ class CategoryController extends Controller {
 
     updateCategory = async(req, res, next) => {
         const { id } = req.params;
+        let { error: objectIDError } = objectIDValidator({id});
+        let { error } = updateCategoryValidator(req.body);
+        if(objectIDError || error) {
+            console.log(error?.message || objectIDError?.message);
+            return next(createError.BadRequest({dataError : error?.message, idError: objectIDError?.message}));
+        }       
         const { title } = req.body;
-        const { error } = updateCategoryValidator({title, id: id});
-        if(error) {
-            return next(createError.BadRequest(error.message));
-        }
         const updateResult = await CategoryModel.findByIdAndUpdate({_id: id}, { $set: {title} }, { new: true }).select({__v: 0});
         if(!updateResult) return next(createError.NotFound('Update failed'));
         return res.status(200).json({

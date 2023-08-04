@@ -20,11 +20,11 @@ function addPermissionValidator(data) {
 
 function updatePermissionValidator(data) {
     const schema = Joi.object({
-        title: Joi.string().optional().allow(null, '').min(3).max(30).trim().lowercase().required().messages({
+        title: Joi.string().optional().allow(null, '').min(3).max(30).trim().lowercase().messages({
             'string.max': 'Title length must be less than or equal to {{#limit}} characters long',
             'string.min': 'Title length must be at least {{#limit}} characters long',
         }),
-        description: Joi.string().optional().allow(null, '').min(3).max(30).trim().lowercase().required().messages({
+        description: Joi.string().optional().allow(null, '').min(3).max(30).trim().lowercase().messages({
             'string.max': 'Description length must be less than or equal to {{#limit}} characters long',
             'string.min': 'Description length must be at least {{#limit}} characters long',
         })

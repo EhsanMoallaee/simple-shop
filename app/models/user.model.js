@@ -12,15 +12,14 @@ const userSchema = new mongoose.Schema({
     bills: { type: [String], default: [] },
     discount_code: { type: Number, default: 0 },
     birthday: { type: String },
-    roles: { type: [String], default: ['User'] },
+    role: { type: String, default: 'User' },
+    permissions : [{ type: mongoose.Types.ObjectId, ref: 'permission' }],
     courses: { type: [mongoose.Types.ObjectId], ref: 'course', default: []}
 }, { timestamps: true, toJSON: { virtuals: true }});
 
 userSchema.plugin(mongooseLeanVirtuals);
 userSchema.index({ first_name: 'text', last_name: 'text', username: 'text', mobile: 'text', email: 'text' });
-// userSchema.virtual('imageURLs').get(function() {
-//     return this.gallery_images.map(img => `${process.env.BASE_URL}:${process.env.PORT}/${img}`)
-// });
 
-const UserModel = mongoose.model('user', userSchema);
-module.exports = UserModel
+module.exports = { 
+    UserModel: mongoose.model('user', userSchema)
+ }

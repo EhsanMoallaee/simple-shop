@@ -2,11 +2,11 @@ const createError = require("http-errors");
 const Controller = require("../../controller");
 const { RoleModel } = require("../../../../models/role.model");
 const { addRoleValidator, updateRoleValidator } = require("../../../validators/admin/RBAC/role.validator");
-const { findRoleByTitle } = require("./functions/findRoleByTitle");
-const { objectIDValidator } = require("../../../validators/publicValidators/objectID.validator");
 const { checkPermissionsExist } = require("./functions/checkPermissionsExist");
 const { deepCopyOfAnObject } = require("../../../../utils/deepCopyOfAnObject");
 const { deleteNullsFromObjects } = require("../../../../utils/deleteNullsFromObject");
+const { findRoleByTitle } = require("./functions/findRoleByTitle");
+const { objectIDValidator } = require("../../../validators/publicValidators/objectID.validator");
 
 class RoleController extends Controller {
 

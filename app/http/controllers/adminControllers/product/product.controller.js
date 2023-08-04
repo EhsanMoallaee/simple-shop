@@ -87,7 +87,7 @@ class ProductController extends Controller {
             console.log(error?.message || objectIDError?.message);
             deleteFilesFromPublic(req.images);
             return next(createError.BadRequest({dataError : error?.message, idError: objectIDError?.message}));
-        }        
+        }
         const product = await ProductModel.findById(id);
         if(!product)  {
             deleteFilesFromPublic(req.images);

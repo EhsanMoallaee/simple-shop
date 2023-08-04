@@ -38,7 +38,7 @@ function addBlogValidator(data) {
 function updateBlogValidator(data) {
     const myJoiObjectId = JoiObjectId(Joi);
     const schema = Joi.object({
-        title: Joi.string().optional().min(3).max(30).trim().allow(null, '').lowercase().messages({
+        title: Joi.string().optional().min(3).max(30).trim().optional().allow(null, '').lowercase().messages({
             'string.max': 'Title length must be less than or equal to {{#limit}} characters long',
             'string.min': 'Title length must be at least {{#limit}} characters long',
         }),

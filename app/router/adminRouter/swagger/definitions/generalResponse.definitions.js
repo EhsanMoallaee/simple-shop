@@ -31,7 +31,7 @@
  *                  example: true
  */
 
-// Info: Failed Response With Data
+// Info: Failed Response Client Error
 /**
  * @swagger
  *  definitions:
@@ -49,7 +49,7 @@
  *                  example: "Failed message related to route action"
  */
 
-// Info: Failed Response With Data
+// Info: Failed Response Server Error
 /**
  * @swagger
  *  definitions:

@@ -22,3 +22,17 @@
  *                      type: string
  *                      description: birthday of user
 */
+
+// Info: Set User Permissions Schema
+/**
+ * @swagger
+ *  components:
+ *      schemas:
+ *          SetUserPermissions:
+ *              type: object
+ *              properties:
+ *                  permissions:
+ *                      type: array
+ *                      items:
+ *                      description: id of permission
+*/

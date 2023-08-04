@@ -39,6 +39,7 @@
  *   name: Authentication
  *   description: Authentication
  */
+
 /**
  * @swagger
  *  /user/get-otp:

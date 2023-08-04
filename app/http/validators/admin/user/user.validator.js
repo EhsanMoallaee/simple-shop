@@ -2,7 +2,6 @@ const Joi = require('joi');
 const JoiObjectId = require('Joi-Objectid');
 
 function updateUserValidator(data) {
-    const myJoiObjectId = JoiObjectId(Joi);
     const schema = Joi.object({
         first_name: Joi.string().min(3).max(30).trim().lowercase().allow(null, '').messages({
             'string.max': 'First name length must be less than or equal to {{#limit}} characters long',
@@ -19,6 +18,19 @@ function updateUserValidator(data) {
     return schema.validate(data);
 }
 
+function setUserPermissionsValidator(data) {
+    const myJoiObjectId = JoiObjectId(Joi);
+    const schema = Joi.object({
+        permissions: Joi.array().max(20).items(
+            myJoiObjectId().messages({
+                'string.pattern.name': 'Wrong object id format'
+            }),
+          )
+    })
+    return schema.validate(data);
+}
+
 module.exports = {
-    updateUserValidator
+    updateUserValidator,
+    setUserPermissionsValidator
 }
