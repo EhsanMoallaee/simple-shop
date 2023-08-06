@@ -1,4 +1,3 @@
-# simple-shop
 Framework and packages:
 -Nodejs, Expressjs, Mongoose, Swagger, Redis, Morgan, Multer, Jsonwebtoken, Bcrypt, Joi.
 Details:
