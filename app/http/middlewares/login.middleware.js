@@ -26,6 +26,21 @@ function verifyAccessToken(req, res, next) {
     }
 }
 
+async function graphqlVerifyAccessToken(req) {
+    try {
+        const token = getToken(req.headers);
+        const secret = process.env.ACCESS_TOKEN_SECRET;
+        const { payload } = jwt.verify(token, secret);
+        const mobile = payload?.mobile || {};
+        const user = await UserModel.findOne({mobile}, {password: 0, otp: 0, bills: 0, discount_code: 0, permissions: 0});
+        if(!user) throw new createError.Unauthorized('Please login first');
+        req.user = user;
+    } catch (error) {
+        throw new createError.Unauthorized('Please login first');
+    }
+}
+
 module.exports = {
     verifyAccessToken,
+    graphqlVerifyAccessToken
 }

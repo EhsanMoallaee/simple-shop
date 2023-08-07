@@ -53,7 +53,6 @@ class EpisodeController extends Controller {
         const { episodeId } = req.params;
         const { error } = objectIDValidator({id: episodeId});
         if(error) {
-            console.log(error);
             return next(createError.BadRequest(error.message));
         }
         const episodeData = {
@@ -83,7 +82,6 @@ class EpisodeController extends Controller {
         let { error } = updateEpisodeValidator(req.body);
         let { error: objectIdError } = objectIDValidator({id: episodeId});
         if(objectIdError || error) {
-            console.log(error?.message || objectIdError?.message);
             deleteFilesFromPublic(req.video);
             return next(createError.BadRequest({dataError : error?.message, idError: objectIdError?.message}));
         }

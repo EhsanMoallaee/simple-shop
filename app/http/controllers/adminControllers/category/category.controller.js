@@ -44,7 +44,6 @@ class CategoryController extends Controller {
         let { error: objectIDError } = objectIDValidator({id});
         let { error } = updateCategoryValidator(req.body);
         if(objectIDError || error) {
-            console.log(error?.message || objectIDError?.message);
             return next(createError.BadRequest({dataError : error?.message, idError: objectIDError?.message}));
         }       
         const { title } = req.body;

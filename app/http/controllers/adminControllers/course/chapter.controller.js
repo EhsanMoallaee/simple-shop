@@ -11,7 +11,6 @@ class ChapterController extends Controller {
         const {id, title, text } = req.body;
         const { error } = objectIDValidator({id: id});
         if(error) {
-            console.log(error);
             return next(createError.BadRequest(error.message));
         }
         const course = await CourseModel.findById(id);
@@ -37,8 +36,7 @@ class ChapterController extends Controller {
         const { id } = req.params;
         const { error } = objectIDValidator({id});
         if(error) {
-            console.log(error);
-            return next(createError.BadRequest(error.message));
+            return next(createError.BadRequest({idError: error.message}));
         }
         const course = await getChaptersOfCourse(id);
         if(!course) return next(createError.NotFound('Course not found'));
@@ -56,8 +54,7 @@ class ChapterController extends Controller {
         const { chapterId } = req.params;
         const { error } = objectIDValidator({id: chapterId});
         if(error) {
-            console.log(error);
-            return next(createError.BadRequest(error.message));
+            return next(createError.BadRequest({idError: error.message}));
         }
         const chapter = await getOneChapter(chapterId);
         if(!chapter) return next(createError.NotFound('chapter not found'));   
@@ -81,8 +78,7 @@ class ChapterController extends Controller {
         const { chapterId } = req.params;
         const { error } = objectIDValidator({id: chapterId});
         if(error) {
-            console.log(error);
-            return next(createError.BadRequest(error.message));
+            return next(createError.BadRequest({idError: error.message}));
         }
         const chapter = await getOneChapter(chapterId);
         if(!chapter) return next(createError.NotFound('Chapter not found'));  

@@ -18,14 +18,11 @@ categorySchema.virtual('children', {
     foreignField: 'parent'
 });
 
-categorySchema
-.pre('findOne', autoPopulate)
-.pre('find', autoPopulate)
-
 function autoPopulate(next) {
-    this.populate([{path: 'children', select: {__v: 0, id: 0}}]);
-    next();
+    this.populate([{path : "children", select : {__v : 0, id : 0}}]);
+    next()
 }
+categorySchema.pre('findOne', autoPopulate).pre("find", autoPopulate)
 
 module.exports = {
     CategoryModel: mongoose.model('category', categorySchema)

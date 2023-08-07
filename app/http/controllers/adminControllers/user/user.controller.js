@@ -28,7 +28,6 @@ class UserController extends Controller {
         let { error: objectIDError } = objectIDValidator({id: userId});
         let { error } = updateUserValidator(req.body);
         if(objectIDError || error) {
-            console.log(error?.message || objectIDError?.message);
             return next(createError.BadRequest({dataError : error?.message, idError: objectIDError?.message}));
         }
         const data = deepCopyOfAnObject(req.body);
@@ -49,7 +48,6 @@ class UserController extends Controller {
         let { error: objectIDError } = objectIDValidator({id});
         let { error } = setUserPermissionsValidator(req.body);
         if(objectIDError || error) {
-            console.log(error?.message || objectIDError?.message);
             return next(createError.BadRequest({dataError : error?.message, idError: objectIDError?.message}));
         }
         const { permissions } = req.body;
@@ -68,8 +66,7 @@ class UserController extends Controller {
         const { id } = req.params;
         let { error } = objectIDValidator({id});
         if(error) {
-            console.log(error?.message);
-            return next(createError.BadRequest({idError: error?.message}));
+            return next(createError.BadRequest({idError: error.message}));
         }
         const user = await UserModel.findById(id, {__v: 0, password: 0});
         if(!user) return next(createError.NotFound('User not found'));

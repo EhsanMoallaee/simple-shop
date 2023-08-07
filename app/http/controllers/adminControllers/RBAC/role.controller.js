@@ -48,7 +48,6 @@ class RoleController extends Controller {
         const { id } = req.params;
         const { error } = objectIDValidator({id});
         if(error) {
-            console.log(error);
             return next(createError.BadRequest(error.message));
         }
         const role = await RoleModel.findByIdAndRemove(id);
@@ -65,7 +64,6 @@ class RoleController extends Controller {
         let { error: objectIDError } = objectIDValidator({id});
         let { error } = updateRoleValidator(req.body);
         if(objectIDError || error) {
-            console.log(error?.message || objectIDError?.message);
             return next(createError.BadRequest({dataError : error?.message, idError: objectIDError?.message}));
         }
         const data = deepCopyOfAnObject(req.body);

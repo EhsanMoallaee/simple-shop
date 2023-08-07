@@ -1,0 +1,26 @@
+{
+  products(category: "64c030117fa0d40ccda70d71") {
+    _id
+    title
+    text
+    tags
+    category {
+      _id
+      title
+    }
+    supplier {
+        first_name
+        last_name
+        mobile
+    }
+    imageURLs
+    features {
+      length
+      width
+      height
+      weight
+      colors
+      made_in
+    }
+  }
+}

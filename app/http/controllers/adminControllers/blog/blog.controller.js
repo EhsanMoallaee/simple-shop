@@ -5,6 +5,7 @@ const { addBlogValidator, updateBlogValidator } = require("../../../validators/a
 const { deepCopyOfAnObject } = require("../../../../utils/deepCopyOfAnObject");
 const { deleteFilesFromPublic } = require("../../../../utils/deleteFilesFromPublic");
 const { deleteNullsFromObjects } = require("../../../../utils/deleteNullsFromObject");
+const { objectIDValidator } = require("../../../validators/publicValidators/objectID.validator");
 
 class BlogController extends Controller {
 
@@ -30,7 +31,11 @@ class BlogController extends Controller {
 
     getBlogById = async(req, res, next) => {
         const { id } = req.params;
-        const blog = await BlogModel.findOne({_id: id}, { autoPopulate: false })
+        const { error } = objectIDValidator({id: id});
+        if(error) {
+            return next(createError.BadRequest({idError: error.message}));
+        }
+        const blog = await BlogModel.findOne({_id: id})
             .populate([
                 {path: 'category', select: {'title': 1}},
                 {path: 'author', select: {'username': 1, 'mobile': 1, '_id': 0}}]
@@ -99,6 +104,10 @@ class BlogController extends Controller {
 
     deleteBlogById = async(req, res, next) => {
         const { id } = req.params;
+        const { error } = objectIDValidator({id});
+        if(error) {
+            return next(createError.BadRequest({idError: error.message}));
+        }
         const result = await BlogModel.findByIdAndDelete(id);
         if(!result) return next(createError.NotFound('Blog not found'));
         return res.status(200).json({
@@ -111,11 +120,11 @@ class BlogController extends Controller {
     updateBlogById = async(req, res, next) => {
         const { id } = req.params;
         const author = req.user._id;
+        const { error: objectIDError } = objectIDValidator({id});
         const { error } = updateBlogValidator(req.body);
-        if(error) {
-            console.log(error);
+        if(objectIDError || error) {
             deleteFilesFromPublic(req.images);
-            return next(createError.BadRequest(error.message));
+            return next(createError.BadRequest({dataError : error?.message, idError: objectIDError?.message}));
         }
         let data = deepCopyOfAnObject(req.body);
         let blackListFields = ['_id', 'author', 'likes', 'dislikes', 'bookmarks', 'comments'];

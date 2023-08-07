@@ -64,8 +64,7 @@ class ProductController extends Controller {
         const { id } = req.params;
         const { error } = objectIDValidator({id: id});
         if(error) {
-            console.log(error);
-            return next(createError.BadRequest(error.message));
+            return next(createError.BadRequest({idError: error.message}));
         }
         const product = await ProductModel.findById(id, {__v: 0});
         if(!product) return next(createError.NotFound('Product not found'));
@@ -84,7 +83,6 @@ class ProductController extends Controller {
         let { error: objectIDError } = objectIDValidator({id});
         let { error } = updateProductValidator(req.body);
         if(objectIDError || error) {
-            console.log(error?.message || objectIDError?.message);
             deleteFilesFromPublic(req.images);
             return next(createError.BadRequest({dataError : error?.message, idError: objectIDError?.message}));
         }
@@ -118,8 +116,7 @@ class ProductController extends Controller {
         const { id } = req.params;
         const { error } = objectIDValidator({id});
         if(error) {
-            console.log(error);
-            return next(createError.BadRequest(error.message));
+            return next(createError.BadRequest({idError: error.message}));
         }
         const product = await ProductModel.findById(id);
         if(!product) return next(createError.NotFound('Product not found'));

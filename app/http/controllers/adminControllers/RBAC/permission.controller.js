@@ -45,7 +45,6 @@ class PermissionController extends Controller {
         const { id } = req.params;
         const { error } = objectIDValidator({id});
         if(error) {
-            console.log(error);
             return next(createError.BadRequest(error.message));
         }
         const permission = await PermissionModel.findByIdAndRemove(id);
@@ -62,7 +61,6 @@ class PermissionController extends Controller {
         let { error: objectIDError } = objectIDValidator({id});
         let { error } = updatePermissionValidator(req.body);
         if(objectIDError || error) {
-            console.log(error?.message || objectIDError?.message);
             return next(createError.BadRequest({dataError : error?.message, idError: objectIDError?.message}));
         }
         const data = deepCopyOfAnObject(req.body);

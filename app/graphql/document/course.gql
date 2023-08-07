@@ -1,0 +1,29 @@
+{
+  courses(category: "64c030117fa0d40ccda70d71") {
+    _id
+    title
+    brief_text
+    text
+    price
+    discount
+    tags
+    imageURL
+    category {
+      _id
+      title
+    }
+    teacher {
+      mobile
+    }
+    chapters {
+      title
+      episodes {
+        title
+        video
+        videoURL
+        time
+      }
+    }
+    totalTime
+  }
+}

@@ -19,7 +19,7 @@ const productSchema = new mongoose.Schema({
     count: { type: Number, required: true },
     type: { type: String, required: true, enum: ['REAL_PRODUCT', 'VIRTUAL_PRODUCT'] },
     format: { type: String },
-    supplier: { type: String, required: true },
+    supplier: { type: mongoose.Types.ObjectId, ref: 'user', required: true },
     features: {
         type: Object,
         default: {

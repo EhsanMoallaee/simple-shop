@@ -62,8 +62,7 @@ class CourseController extends Controller {
         const { id } = req.params;
         const { error } = objectIDValidator({id: id});
         if(error) {
-            console.log(error);
-            return next(createError.BadRequest(error.message));
+            return next(createError.BadRequest({idError: error.message}));
         }
         const course = await CourseModel.findById(id);
         if(!course) return next(createError.NotFound('Course not found'));
@@ -82,7 +81,6 @@ class CourseController extends Controller {
         let { error: objectIdError } = objectIDValidator({id});
         let { error } = updateCourseValidator(req.body);
         if(objectIdError || error) {
-            console.log(error?.message || objectIdError?.message);
             deleteFilesFromPublic(req.images);
             return next(createError.BadRequest({dataError : error?.message, idError: objectIdError?.message}));
         }

@@ -6,7 +6,6 @@ const morgan = require('morgan');
 const path = require("path");
 const swaggerUI = require('swagger-ui-express');
 const swaggerJsDoc = require('swagger-jsdoc');
-
 const { router } = require('./router/router');
 const MongodbConnection = require('./utils/database-utils/mongodb.connection');
 
@@ -82,9 +81,7 @@ module.exports = class Application {
 
     createRoutes = () => {
         this.#app.use(router, async (err, req, res, next) => {
-            if(err) {
-                next(err)
-            }
+            if(err) next(err)
         });
     }
 
@@ -94,8 +91,8 @@ module.exports = class Application {
         });
 
         this.#app.use((err, req, res, next) => {
-            console.log(err);
-            console.log('-------------------------------------');
+            // console.log(err);
+            // console.log('-------------------------------------');
             console.log(err.message);
             const serverError = createError.InternalServerError('Internal server error occured')
             const statusCode = err.status || serverError.statusCode;
