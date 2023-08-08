@@ -35,10 +35,11 @@ class BlogController extends Controller {
         if(error) {
             return next(createError.BadRequest({idError: error.message}));
         }
-        const blog = await BlogModel.findOne({_id: id}) .populate([
+        const blog = await BlogModel.findOne({_id: id}).populate([
             {path: 'category', select: {'title': 1}},
-            {path: 'author', select: {'username': 1, 'mobile': 1, '_id': 0}}]
-        );
+            {path: 'author', select: {'username': 1, 'mobile': 1, '_id': 0}},
+            {path: 'dislikes.userId', select: {'first_name': 1, 'mobile': 1, '_id': 0}},
+        ]).lean({ virtuals: true });
         if(!blog) return next(createError.NotFound('Blog not found'));
         return res.status(200).json({
             statusCode: 200,
@@ -50,47 +51,14 @@ class BlogController extends Controller {
     }
 
     getAllBlogs = async(req, res, next) => {
-        const blogs = await BlogModel.aggregate([
-            { $match: {} },
-            {
-                $lookup: {
-                    from: 'users',
-                    foreignField: '_id',
-                    localField: 'author',
-                    as: 'author'
-                }
-            },
-            {
-                $unwind: '$author'
-            },
-            {
-                $lookup: {
-                    from: 'categories',
-                    foreignField: '_id',
-                    localField: 'category',
-                    as: 'category'
-                }
-            },
-            {
-                $unwind: '$category'
-            },
-            {
-                $project: {
-                    'author.otp': 0,
-                    'author.discount_code': 0,
-                    'author.roles': 0,
-                    'author.bills': 0,
-                    'author.__v': 0,
-                    'category.__v': 0,
-                }
-            },
-            {
-                $addFields: { 
-                    imageURL:
-                        { $concat: [ process.env.BASE_URL, process.env.PORT, "$image" ] } 
-                    }
-            }
-        ]);
+        const blogs = await BlogModel.find().populate([
+            {path: 'author', select: {first_name: 1, last_name: 1, username: 1, email: 1, _id: 0}},
+            {path: 'category', select: {title: 1}},
+            {path: 'comments.user', select: {first_name: 1, last_name: 1, username: 1, email: 1, _id: 0}},
+            {path: 'comments.answers.user', select: {first_name: 1, last_name: 1, username: 1, email: 1, _id: 0}},
+            {path: 'likes.userId', select: {first_name: 1, last_name: 1, username: 1, email: 1, _id: 0}},
+            {path: 'dislikes.userId', select: {first_name: 1, last_name: 1, username: 1, email: 1, _id: 0}},
+        ]).lean({virtuals: true})
         if(!blogs || blogs.length == 0) return next(createError.NotFound('Blog not found'));
         return res.status(200).json({
             statusCode: 200,

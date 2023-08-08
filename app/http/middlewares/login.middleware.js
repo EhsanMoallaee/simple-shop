@@ -35,6 +35,7 @@ async function graphqlVerifyAccessToken(req) {
         const user = await UserModel.findOne({mobile}, {password: 0, otp: 0, bills: 0, discount_code: 0, permissions: 0});
         if(!user) throw new createError.Unauthorized('Please login first');
         req.user = user;
+        return user;
     } catch (error) {
         throw new createError.Unauthorized('Please login first');
     }

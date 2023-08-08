@@ -37,37 +37,12 @@ const blogSchema = new mongoose.Schema({
         type: [commentSchema],
         default: []
     },
-    likes: [
-        {
-            userId: { type: mongoose.Types.ObjectId, ref: "user"},
-            _id: false
-        }
-    ],
-    dislikes: [
-        {
-            userId: { type: mongoose.Types.ObjectId, ref: "user"},
-            _id: false
-        }
-    ],
-    bookmarks: [
-        {
-            userId: { type: mongoose.Types.ObjectId, ref: "user"},
-            _id: false
-        }
-    ],
+    likes: {type : [mongoose.Types.ObjectId], ref: "user", default : []},
+    dislikes: {type : [mongoose.Types.ObjectId], ref: "user", default : []},
+    bookmarks: {type : [mongoose.Types.ObjectId], ref: "user", default : []},
 }, { timestamps: true, versionKey: false, toJSON: {virtuals: true} });
 
 blogSchema.plugin(mongooseLeanVirtuals);
-blogSchema.virtual('user_detail', {
-    ref: 'user',
-    localField: '_id',
-    foreignField: 'author',
-});
-blogSchema.virtual('category_detail', {
-    ref: 'category',
-    localField: '_id',
-    foreignField: 'category',
-});
 
 blogSchema.virtual("imageURL").get(function() {
     return `${process.env.BASE_URL}:${process.env.PORT}/${this.image}`

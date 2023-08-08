@@ -4,6 +4,20 @@
     title
     brief_text
     text
+    likes {
+      _id
+      first_name
+      last_name
+      email
+      mobile
+    }
+    dislikes {
+      _id
+      first_name
+      last_name
+      email
+      mobile
+    }
     tags
     imageURL
     comments {
@@ -43,36 +57,50 @@ query getBlogs($categoryId: String) {
 }
 fragment blogFields on BlogType {
   _id
-  title
-  brief_text
-  text
-  tags
-  imageURL
-  comments {
-    comment
-    user {
+    title
+    brief_text
+    text
+    likes {
       _id
-      email
       first_name
       last_name
+      email
       mobile
     }
-    createdAt
-    answers {
+    dislikes {
+      _id
+      first_name
+      last_name
+      email
+      mobile
+    }
+    tags
+    imageURL
+    comments {
       comment
       user {
+        _id
+        email
         first_name
         last_name
         mobile
       }
       createdAt
+      answers {
+        comment
+        user {
+          first_name
+          last_name
+          mobile
+        }
+        createdAt
+      }
     }
-  }
-  category {
-    _id
-    title
-  }
-  author {
-    mobile
-  }
+    category {
+      _id
+      title
+    }
+    author {
+      mobile
+    }
 }

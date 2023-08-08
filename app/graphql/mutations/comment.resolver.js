@@ -10,7 +10,7 @@ const { checkExistCourse } = require("../utils/checkExistCourse");
 const { checkExistProduct } = require("../utils/checkExistProduct");
 const { getComments } = require("../utils/getComments");
 const { graphqlVerifyAccessToken } = require("../../http/middlewares/login.middleware");
-const { objectIDValidator } = require("../../http/validators/publicValidators/objectID.validator");
+const { validateObjectId } = require("./functions/validateItemId");
 
 const CreateCommentForBlogResolver = {
     type: ResponseType,
@@ -22,28 +22,26 @@ const CreateCommentForBlogResolver = {
     resolve: async(_, args, context) => {
         const { comment, blogId, parent } = args;
         const { req } = context;
-        await graphqlVerifyAccessToken(req);
+        const user = await graphqlVerifyAccessToken(req);
         const blogExist = await checkExistBlog(blogId);
         if(!blogExist) throw new createError.NotFound('Blog not found');
         let parentComment;
         if(parent) {
-            const { error } = objectIDValidator({id: parent});
-            if(error) {
-                return new createError.BadRequest(error.message);
-            }
+            validateObjectId(parent);
             const commentExist = await getComments(BlogModel, parent);
             if(!commentExist || commentExist.length == 0) return new createError.NotFound('Comment not found');
             if(!commentExist.comments?.[0].open_toReply) return new createError.Forbidden('Replying to this comment is not allowed');
             parentComment = commentExist.comments?.[0];
         }
         const commentData = {
-            user: req.user._id,
+            user: user._id,
             comment: comment,
             parent: parent ? parent : null,
             open_toReply: !parent
         }
         const searchQuery = parentComment ? {_id: blogId, 'comments._id': parentComment._id } : {_id: blogId};
-        const updatedBlog = await BlogModel.findOneAndUpdate(searchQuery, { $push: { 'comments.$.answers' : commentData }}, {new: true});
+        const updateQuery = parentComment ? { $push: { 'comments.$.answers' : commentData }} : { $push: { 'comments' : commentData }};
+        const updatedBlog = await BlogModel.findOneAndUpdate(searchQuery, updateQuery, {new: true});
         if(!updatedBlog) throw new createError.NotFound('Blog not found');
         return {
             statusCode: 200,
@@ -63,22 +61,19 @@ const CreateCommentForCourseResolver = {
     resolve: async(_, args, context) => {
         const { comment, courseId, parent } = args;
         const { req } = context;
-        await graphqlVerifyAccessToken(req);
+        const user = await graphqlVerifyAccessToken(req);
         const courseExist = await checkExistCourse(courseId);
         if(!courseExist) throw new createError.NotFound('Course not found');
         let parentComment;
         if(parent) {
-            const { error } = objectIDValidator({id: parent});
-            if(error) {
-                return new createError.BadRequest(error.message);
-            }
+            validateObjectId(parent);
             const commentExist = await getComments(CourseModel, parent);
             if(!commentExist || commentExist.length == 0) return new createError.NotFound('Comment not found');
             if(!commentExist.comments?.[0].open_toReply) return new createError.Forbidden('Replying to this comment is not allowed');
             parentComment = commentExist.comments?.[0];
         }
         const commentData = {
-            user: req.user._id,
+            user: user._id,
             comment: comment,
             parent: parent ? parent : null,
             open_toReply: !parent
@@ -106,28 +101,21 @@ const CreateCommentForProductResolver = {
         const { comment, productId, parent } = args;
         const { req } = context;
 
-        await graphqlVerifyAccessToken(req);
-
-        const { error } = objectIDValidator({id: productId});
-        if(error) {
-            return new createError.BadRequest(error.message);
-        }
+        const user = await graphqlVerifyAccessToken(req);
+        validateObjectId(productId);
         const productExist = await checkExistProduct(productId);
         if(!productExist) throw new createError.NotFound('Product not found');
 
         let parentComment;
         if(parent) {
-            const { error } = objectIDValidator({id: parent});
-            if(error) {
-                return new createError.BadRequest(error.message);
-            }
+            validateObjectId(parent);
             const commentExist = await getComments(ProductModel, parent);
             if(!commentExist || commentExist.length == 0) return new createError.NotFound('Comment not found');
             if(!commentExist.comments?.[0].open_toReply) return new createError.Forbidden('Replying to this comment is not allowed');
             parentComment = commentExist.comments?.[0];
         }
         const commentData = {
-            user: req.user._id,
+            user: user._id,
             comment: comment,
             parent: parent ? parent : null,
             open_toReply: !parent

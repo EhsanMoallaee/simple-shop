@@ -3,6 +3,20 @@
     _id
     title
     text
+    likes {
+      _id
+      first_name
+      last_name
+      email
+      mobile
+    }
+    dislikes {
+      _id
+      first_name
+      last_name
+      email
+      mobile
+    }
     comments {
       comment
       user {

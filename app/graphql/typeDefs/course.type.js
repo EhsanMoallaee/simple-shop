@@ -42,7 +42,10 @@ const CourseType = new GraphQLObjectType({
         category: { type: CategorySubType },
         tags: { type: new GraphQLList(GraphQLString) },
         chapters: { type: new GraphQLList(ChaptersType) },
-        comments: { type: new GraphQLList(CommentType)}
+        comments: { type: new GraphQLList(CommentType)},
+        likes: { type: new GraphQLList(UserType)},
+        dislikes: { type: new GraphQLList(UserType)},
+        bookmarks: { type: new GraphQLList(UserType)},
     }
 })
 
