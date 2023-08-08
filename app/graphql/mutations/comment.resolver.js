@@ -105,9 +105,16 @@ const CreateCommentForProductResolver = {
     resolve: async(_, args, context) => {
         const { comment, productId, parent } = args;
         const { req } = context;
+
         await graphqlVerifyAccessToken(req);
+
+        const { error } = objectIDValidator({id: productId});
+        if(error) {
+            return new createError.BadRequest(error.message);
+        }
         const productExist = await checkExistProduct(productId);
         if(!productExist) throw new createError.NotFound('Product not found');
+
         let parentComment;
         if(parent) {
             const { error } = objectIDValidator({id: parent});

@@ -11,9 +11,25 @@ const productSchema = new mongoose.Schema({
     tags: { type: [String], default: [] },
     category: { type: mongoose.Types.ObjectId, ref: 'category', required: true },
     comments: { type: [commentSchema], default: [] },
-    likes: { type: [mongoose.Types.ObjectId], default: [] },
-    dislikes: { type: [mongoose.Types.ObjectId], default: [] },
-    bookmarks: { type: [mongoose.Types.ObjectId], default: [] },
+    likes: [
+        {
+            userId: { type: mongoose.Types.ObjectId, ref: "user"},
+            _id: false
+        }
+    ],
+    // dislikes: { type: [mongoose.Types.ObjectId], default: [] },
+    dislikes: [
+        {
+            userId: { type: mongoose.Types.ObjectId, ref: "user"},
+            _id: false
+        }
+    ],
+    bookmarks: [
+        {
+            userId: { type: mongoose.Types.ObjectId, ref: "user"},
+            _id: false
+        }
+    ],
     price: { type: Number, default: 0 },
     discount: { type: Number, default: 0 },
     count: { type: Number, required: true },
