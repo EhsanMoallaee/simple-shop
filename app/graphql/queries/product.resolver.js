@@ -1,5 +1,5 @@
-const { GraphQLList, GraphQLString } = require('graphql');
 const { ProductModel } = require('../../models/product.model');
+const { GraphQLList, GraphQLString } = require('graphql');
 const { ProductType } = require('../typeDefs/product.type');
 
 const ProductResolver = {

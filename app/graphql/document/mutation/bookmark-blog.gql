@@ -1,0 +1,9 @@
+mutation {
+  BookmarkBlogResolver(
+    blogId: "64d2698286769c60e2631f27"
+  ){
+    statusCode
+    success
+    message
+  }
+}

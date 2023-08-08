@@ -1,0 +1,9 @@
+mutation {
+  BookmarkProductResolver(
+    productId: "64c4a8a137d3d87d79688619"
+  ){
+    statusCode
+    success
+    message
+  }
+}

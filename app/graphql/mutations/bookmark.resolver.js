@@ -6,14 +6,11 @@ const { GraphQLString, GraphQLBoolean } = require("graphql");
 const { ResponseType } = require("../typeDefs/public.types");
 
 const { graphqlVerifyAccessToken } = require("../../http/middlewares/login.middleware");
-const { likeDislikeUpdateQuery } = require("./functions/likeDislikeUpdateQuery");
 const { validateObjectId } = require("../utils/validateItemId");
 
-const LikeAndDislikeProductResolver = {
+const BookmarkProductResolver = {
     type: ResponseType,
     args: {
-        like: { type: GraphQLBoolean},
-        dislike: { type: GraphQLBoolean},
         productId: { type: GraphQLString}
     },
     resolve: async(_, args, context) => {
@@ -21,16 +18,16 @@ const LikeAndDislikeProductResolver = {
         const { req } = context;
         const user = await graphqlVerifyAccessToken(req);
         validateObjectId(productId);
-        let product = await ProductModel.findOne({
-             _id: productId,
-             $or: [
-                { likes: user._id },
-                { dislikes: user._id }
-            ] 
+        const bookmarkedProduct = await ProductModel.findOne({
+            _id: productId,
+            bookmarks: user._id
         });
-        const {updateQuery, message} = likeDislikeUpdateQuery('product', product, like, dislike, user._id);        
+        const updateQuery = bookmarkedProduct ? {$pull: {bookmarks: user._id}} : {$push: {bookmarks: user._id}};        
         const updatedProduct = await ProductModel.findByIdAndUpdate(productId, updateQuery);
-        if(!updatedProduct) throw new createError.BadRequest('Like or Dislike operation failed');
+        let message;
+        if(!bookmarkedProduct) message = 'Product bookmarked successfully';
+        else message = 'Product removed from bookmarked list successfully';
+        if(!updatedProduct) throw new createError.BadRequest('Bookmark product operation failed');
         return {
             statusCode: 200,
             success: true,
@@ -39,28 +36,26 @@ const LikeAndDislikeProductResolver = {
     }
 }
 
-const LikeAndDislikeCourseResolver = {
+const BookmarkCourseResolver = {
     type: ResponseType,
     args: {
-        like: { type: GraphQLBoolean},
-        dislike: { type: GraphQLBoolean},
         courseId: { type: GraphQLString}
     },
     resolve: async(_, args, context) => {
-        const { courseId, like, dislike } = args;
+        const { courseId } = args;
         const { req } = context;
         const user = await graphqlVerifyAccessToken(req);
         validateObjectId(courseId);
-        let course = await CourseModel.findOne({
-             _id: courseId,
-             $or: [
-                { likes: user._id },
-                { dislikes: user._id }
-            ] 
+        let bookmarkedCourse = await CourseModel.findOne({
+            _id: courseId,
+            bookmarks: user._id
         });
-        const {updateQuery, message} = likeDislikeUpdateQuery('course', course, like, dislike, user._id);
+        const updateQuery = bookmarkedCourse ? {$pull: {bookmarks: user._id}} : {$push: {bookmarks: user._id}}; 
         const updatedCourse = await CourseModel.findByIdAndUpdate(courseId, updateQuery);
-        if(!updatedCourse) throw new createError.BadRequest('Like or Dislike operation failed');
+        let message;
+        if(!bookmarkedCourse) message = 'Course bookmarked successfully';
+        else message = 'Course removed from bookmarked list successfully';
+        if(!updatedCourse) throw new createError.BadRequest('Bookmark course operation failed');
         return {
             statusCode: 200,
             success: true,
@@ -69,11 +64,9 @@ const LikeAndDislikeCourseResolver = {
     }
 }
 
-const LikeAndDislikeBlogResolver = {
+const BookmarkBlogResolver = {
     type: ResponseType,
     args: {
-        like: { type: GraphQLBoolean},
-        dislike: { type: GraphQLBoolean},
         blogId: { type: GraphQLString}
     },
     resolve: async(_, args, context) => {
@@ -81,16 +74,16 @@ const LikeAndDislikeBlogResolver = {
         const { req } = context;
         const user = await graphqlVerifyAccessToken(req);
         validateObjectId(blogId);
-        let blog = await BlogModel.findOne({
+        const bookmarkedBlog = await BlogModel.findOne({
              _id: blogId,
-             $or: [
-                { likes: user._id },
-                { dislikes: user._id }
-            ] 
+             bookmarks: user._id
         });
-        const {updateQuery, message} = likeDislikeUpdateQuery('blog', blog, like, dislike, user._id);
+        const updateQuery = bookmarkedBlog ? {$pull: {bookmarks: user._id}} : {$push: {bookmarks: user._id}};
         const updatedBlog = await BlogModel.findByIdAndUpdate(blogId, updateQuery);
-        if(!updatedBlog) throw new createError.BadRequest('Like or Dislike operation failed');
+        let message;
+        if(!bookmarkedBlog) message = 'Blog bookmarked successfully';
+        else message = 'Blog removed from bookmarked list successfully';
+        if(!updatedBlog) throw new createError.BadRequest('Bookmark blog operation failed');
         return {
             statusCode: 200,
             success: true,
@@ -100,7 +93,7 @@ const LikeAndDislikeBlogResolver = {
 }
 
 module.exports = {
-    LikeAndDislikeProductResolver,
-    LikeAndDislikeCourseResolver,
-    LikeAndDislikeBlogResolver
+    BookmarkProductResolver,
+    BookmarkCourseResolver,
+    BookmarkBlogResolver
 }

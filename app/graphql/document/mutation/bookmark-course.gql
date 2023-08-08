@@ -1,0 +1,9 @@
+mutation {
+  BookmarkCourseResolver(
+    courseId: "64c888a6a0b52c0868c965fa"
+  ){
+    statusCode
+    success
+    message
+  }
+}

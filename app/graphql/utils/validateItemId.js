@@ -1,5 +1,5 @@
 const createError = require("http-errors");
-const { objectIDValidator } = require("../../../http/validators/publicValidators/objectID.validator");
+const { objectIDValidator } = require("../../http/validators/publicValidators/objectID.validator");
 
 function validateObjectId(id) {
     const { error } = objectIDValidator({id});

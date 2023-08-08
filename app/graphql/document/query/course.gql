@@ -1,5 +1,5 @@
 {
-  courses(category: "64c029d4d0dcc4efe3a72e5a") {
+  courses(category: "") {
     _id
     title
     brief_text
@@ -10,15 +10,22 @@
       _id
       first_name
       last_name
-      email
       mobile
+      email
     }
     dislikes {
       _id
       first_name
       last_name
-      email
       mobile
+      email
+    }
+    bookmarks {
+      _id
+      first_name
+      last_name
+      mobile
+      email
     }
     comments {
       comment

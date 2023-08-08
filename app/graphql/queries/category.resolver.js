@@ -1,5 +1,5 @@
-const { GraphQLList, GraphQLString } = require("graphql");
 const { CategoryModel } = require("../../models/category.model");
+const { GraphQLList, GraphQLString } = require("graphql");
 const { CategoryType } = require("../typeDefs/category.type");
 
 const CategoryResolver = {

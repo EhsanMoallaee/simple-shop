@@ -1,6 +1,6 @@
+const { BlogModel } = require("../../models/blog.model");
 const { GraphQLList, GraphQLString } = require("graphql")
 const { BlogType } = require("../typeDefs/blog.type")
-const { BlogModel } = require("../../models/blog.model");
 const { graphqlVerifyAccessToken } = require("../../http/middlewares/login.middleware");
 
 const BlogResolver = {

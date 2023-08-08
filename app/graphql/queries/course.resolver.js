@@ -1,7 +1,6 @@
-const { GraphQLList, GraphQLString } = require("graphql");
-const { graphqlVerifyAccessToken } = require("../../http/middlewares/login.middleware");
-const { CourseType } = require("../typeDefs/course.type");
 const { CourseModel } = require("../../models/course.model");
+const { GraphQLList, GraphQLString } = require("graphql");
+const { CourseType } = require("../typeDefs/course.type");
 
 const CourseResolver = {
     type: new GraphQLList(CourseType),

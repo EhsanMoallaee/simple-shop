@@ -10,7 +10,7 @@ const { checkExistCourse } = require("../utils/checkExistCourse");
 const { checkExistProduct } = require("../utils/checkExistProduct");
 const { getComments } = require("../utils/getComments");
 const { graphqlVerifyAccessToken } = require("../../http/middlewares/login.middleware");
-const { validateObjectId } = require("./functions/validateItemId");
+const { validateObjectId } = require("../utils/validateItemId");
 
 const CreateCommentForBlogResolver = {
     type: ResponseType,
