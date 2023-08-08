@@ -6,6 +6,7 @@ const { CourseResolver } = require("./queries/course.resolver");
 const { CreateCommentForBlogResolver, CreateCommentForProductResolver, CreateCommentForCourseResolver } = require("./mutations/comment.resolver");
 const { LikeAndDislikeProductResolver, LikeAndDislikeCourseResolver, LikeAndDislikeBlogResolver } = require("./mutations/likeAndDislike.resolver");
 const { BookmarkProductResolver, BookmarkCourseResolver, BookmarkBlogResolver } = require("./mutations/bookmark.resolver");
+const { getUserBookmarkedBlogsResolver, getUserBookmarkedCoursesResolver, getUserBookmarkedProductsResolver } = require("./queries/user-profile.resolver");
 
 const RootQuery = new GraphQLObjectType({
     name: 'RootQuery',
@@ -15,6 +16,9 @@ const RootQuery = new GraphQLObjectType({
         categories: CategoryResolver,
         categoryChildren: CategoryChildrenResolver,
         courses: CourseResolver,
+        getUserBookmarkedBlogsResolver,
+        getUserBookmarkedCoursesResolver,
+        getUserBookmarkedProductsResolver
     }
 })
 

@@ -1,6 +1,6 @@
 // Info: Swagger Schemas:
 
-// Info: Add Course Schema
+// Info: Add Blog Schema
 /**
  * @swagger
  *  components:
@@ -17,13 +17,13 @@
  *              properties:
  *                  title:
  *                      type: string
- *                      description: Title of course
+ *                      description: Title of blog
  *                  brief_text:
  *                      type: string
- *                      description: Brief text of course
+ *                      description: Brief text of blog
  *                  text:
  *                      type: string
- *                      description: Text of course
+ *                      description: Text of blog
  *                  tags:
  *                      type: array
  *                      description: The list of tags as an array
@@ -33,7 +33,7 @@
  *                  image:
  *                      type: string
  *                      format: binary
- *                      description: image of course
+ *                      description: image of blog
 */
 
 // Info: Update Blog Schema
@@ -46,13 +46,13 @@
  *              properties:
  *                  title:
  *                      type: string
- *                      description: Title of product
+ *                      description: Title of blog
  *                  brief_text:
  *                      type: string
- *                      description: Brief text of product
+ *                      description: Brief text of blog
  *                  text:
  *                      type: string
- *                      description: Text of product
+ *                      description: Text of blog
  *                  tags:
  *                      type: array
  *                      description: The list of tags as an array

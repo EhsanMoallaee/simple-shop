@@ -30,5 +30,5 @@
  *              properties:
  *                  title:
  *                      type: string
- *                      description: Title of product
+ *                      description: Title of category
 */

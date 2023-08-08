@@ -29,7 +29,7 @@
  *              properties:
  *                  title:
  *                      type: string
- *                      description: title of role
+ *                      description: title of permission
  *                  description:
  *                      type: string
  *                      description: Can edit product
