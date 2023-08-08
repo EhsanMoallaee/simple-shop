@@ -1,4 +1,5 @@
 const { default: mongoose } = require("mongoose");
+const mongooseLeanVirtuals = require('mongoose-lean-virtuals');
 const { commentSchema } = require("./public.schemas");
 
 const blogSchema = new mongoose.Schema({
@@ -53,6 +54,7 @@ const blogSchema = new mongoose.Schema({
     }
 }, { timestamps: true, versionKey: false, toJSON: {virtuals: true} });
 
+blogSchema.plugin(mongooseLeanVirtuals);
 blogSchema.virtual('user_detail', {
     ref: 'user',
     localField: '_id',

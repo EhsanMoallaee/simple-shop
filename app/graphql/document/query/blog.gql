@@ -1,0 +1,78 @@
+{
+  blogs(category: "") {
+    _id
+    title
+    brief_text
+    text
+    tags
+    imageURL
+    comments {
+      comment
+      user {
+        _id
+        email
+        first_name
+        last_name
+        mobile
+      }
+      createdAt
+      answers {
+        comment
+        user {
+          first_name
+          last_name
+          mobile
+        }
+        createdAt
+      }
+    }
+    category {
+      _id
+      title
+    }
+    author {
+      mobile
+    }
+  }
+}
+// Use Fragment (in front end)
+query getBlogs($categoryId: String) {
+  StoreBlogs: blogs(category: $categoryId) {
+    ...blogFields
+  }
+}
+fragment blogFields on BlogType {
+  _id
+  title
+  brief_text
+  text
+  tags
+  imageURL
+  comments {
+    comment
+    user {
+      _id
+      email
+      first_name
+      last_name
+      mobile
+    }
+    createdAt
+    answers {
+      comment
+      user {
+        first_name
+        last_name
+        mobile
+      }
+      createdAt
+    }
+  }
+  category {
+    _id
+    title
+  }
+  author {
+    mobile
+  }
+}

@@ -1,5 +1,5 @@
 Framework and packages:
--Nodejs, Expressjs, Mongoose, Swagger, Redis, Morgan, Multer, Jsonwebtoken, Bcrypt, Joi.
+-Nodejs, Expressjs, Mongoose, graphql, Swagger, Redis, Morgan, Multer, Jsonwebtoken, Bcrypt, Joi.
 Details:
 -Object Oriented Programming (oop).
 -RBAC: Roles and Permissions gurad.

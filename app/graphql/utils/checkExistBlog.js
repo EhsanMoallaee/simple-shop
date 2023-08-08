@@ -1,4 +1,3 @@
-const createError = require("http-errors");
 const { BlogModel } = require("../../models/blog.model");
 
 async function checkExistBlog(id) {

@@ -35,11 +35,10 @@ class BlogController extends Controller {
         if(error) {
             return next(createError.BadRequest({idError: error.message}));
         }
-        const blog = await BlogModel.findOne({_id: id})
-            .populate([
-                {path: 'category', select: {'title': 1}},
-                {path: 'author', select: {'username': 1, 'mobile': 1, '_id': 0}}]
-            );
+        const blog = await BlogModel.findOne({_id: id}) .populate([
+            {path: 'category', select: {'title': 1}},
+            {path: 'author', select: {'username': 1, 'mobile': 1, '_id': 0}}]
+        );
         if(!blog) return next(createError.NotFound('Blog not found'));
         return res.status(200).json({
             statusCode: 200,

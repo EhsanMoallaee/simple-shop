@@ -1,0 +1,11 @@
+mutation {
+  CreateCommentForProductResolver(
+    comment: "Hi Dear",
+    productId: "64c4a8a137d3d87d79688619"
+    parent: "64d21ff0431445dac9386e94"
+  ){
+    statusCode
+    success
+    message
+  }
+}

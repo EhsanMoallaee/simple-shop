@@ -1,4 +1,4 @@
-const { GraphQLObjectType, GraphQLString, GraphQLScalarType, Kind, GraphQLList, GraphQLBoolean } = require("graphql");
+const { GraphQLObjectType, GraphQLString, GraphQLScalarType, GraphQLBoolean } = require("graphql");
 const { parseToObject } = require("../utils/parseToObject");
 const { parseLiteral } = require("../utils/parseLiterlal");
 

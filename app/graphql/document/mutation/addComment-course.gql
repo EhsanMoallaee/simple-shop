@@ -1,0 +1,11 @@
+mutation {
+  CreateCommentForCourseResolver(
+    comment: "Hi Dear",
+    courseId: "64c97f6f7e14c712fcf219e7"
+    parent: "64d21ff0431445dac9386e94"
+  ){
+    statusCode
+    success
+    message
+  }
+}

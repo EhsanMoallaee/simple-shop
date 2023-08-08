@@ -13,7 +13,12 @@ const BlogResolver = {
         await graphqlVerifyAccessToken(req);
         const { category } = args;
         const findQuery = category ? { category } : {};
-        return await BlogModel.find(findQuery).populate([{path: 'author'}, {path: 'category'}]).lean({ virtuals: true });
+        return await BlogModel.find(findQuery).populate([
+            {path: 'author'},
+            {path: 'category'},
+            {path: 'comments.user'},
+            {path: 'comments.answers.user'},
+        ]).lean({ virtuals: true });
     }
 }
 

@@ -1,0 +1,11 @@
+mutation {
+  CreateCommentForBlogResolver(
+    comment: "Hi Dear answer1",
+    blogId: "64c89229fce3fa490ca28af1"
+    parent: "64d204722853a62bcf17b949"
+  ){
+    statusCode
+    success
+    message
+  }
+}
