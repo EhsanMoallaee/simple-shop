@@ -17,7 +17,6 @@ const productSchema = new mongoose.Schema({
             _id: false
         }
     ],
-    // dislikes: { type: [mongoose.Types.ObjectId], default: [] },
     dislikes: [
         {
             userId: { type: mongoose.Types.ObjectId, ref: "user"},

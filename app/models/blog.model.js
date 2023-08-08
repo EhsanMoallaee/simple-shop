@@ -37,21 +37,24 @@ const blogSchema = new mongoose.Schema({
         type: [commentSchema],
         default: []
     },
-    likes: {
-        type: [mongoose.Types.ObjectId],
-        ref: 'user',
-        default: []
-    },
-    dislikes: {
-        type: [mongoose.Types.ObjectId],
-        ref: 'user',
-        default: []
-    },
-    bookmarks: {
-        type: [mongoose.Types.ObjectId],
-        ref: 'user',
-        default: []
-    }
+    likes: [
+        {
+            userId: { type: mongoose.Types.ObjectId, ref: "user"},
+            _id: false
+        }
+    ],
+    dislikes: [
+        {
+            userId: { type: mongoose.Types.ObjectId, ref: "user"},
+            _id: false
+        }
+    ],
+    bookmarks: [
+        {
+            userId: { type: mongoose.Types.ObjectId, ref: "user"},
+            _id: false
+        }
+    ],
 }, { timestamps: true, versionKey: false, toJSON: {virtuals: true} });
 
 blogSchema.plugin(mongooseLeanVirtuals);

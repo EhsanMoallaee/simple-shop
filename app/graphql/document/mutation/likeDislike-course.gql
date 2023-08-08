@@ -1,0 +1,54 @@
+// Info: Like A Course
+mutation {
+  LikeAndDislikeCourseResolver(
+    courseId: "64c89229fce3fa490ca28af1"
+    like: true
+  ){
+    statusCode
+    success
+    message
+  }
+}
+// Info: Dislike A Course
+mutation {
+  LikeAndDislikeCourseResolver(
+    courseId: "64c89229fce3fa490ca28af1"
+    dislike: true
+  ){
+    statusCode
+    success
+    message
+  }
+}
+// Info: Remove Like or Dislike From Liked or Disliked Course
+mutation {
+  LikeAndDislikeCourseResolver(
+    courseId: "64c89229fce3fa490ca28af1"
+  ){
+    statusCode
+    success
+    message
+  }
+}
+// Info: Change Like To Dislike In Liked Course
+mutation {
+  LikeAndDislikeCourseResolver(
+    courseId: "64c89229fce3fa490ca28af1"
+    dislike: true
+  ){
+    statusCode
+    success
+    message
+  }
+}
+// Info: Change Dislike To Like In Disliked Course
+mutation {
+  LikeAndDislikeCourseResolver(
+    courseId: "64c89229fce3fa490ca28af1"
+    like: true
+  ){
+    statusCode
+    success
+    message
+  }
+}

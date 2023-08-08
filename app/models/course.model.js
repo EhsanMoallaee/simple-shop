@@ -28,9 +28,24 @@ const courseSchema = new mongoose.Schema({
     tags: { type: [String], ref: 'tags', default: [] },
     category: { type: mongoose.Types.ObjectId, ref: 'category', required: true },
     comments: { type: [commentSchema], default: [] },
-    likes: { type: [mongoose.Types.ObjectId], ref: 'user', default: [] },
-    dislikes: { type: [mongoose.Types.ObjectId], ref: 'user', default: [] },
-    bookmarks: { type: [mongoose.Types.ObjectId], ref: 'user', default: [] },
+    likes: [
+        {
+            userId: { type: mongoose.Types.ObjectId, ref: "user"},
+            _id: false
+        }
+    ],
+    dislikes: [
+        {
+            userId: { type: mongoose.Types.ObjectId, ref: "user"},
+            _id: false
+        }
+    ],
+    bookmarks: [
+        {
+            userId: { type: mongoose.Types.ObjectId, ref: "user"},
+            _id: false
+        }
+    ],
     price: { type: Number, default: 0 },
     discount: { type: Number, default: 0 },
     type: { type: String, required: true, enum: ['FREE', 'CASH', 'VIP'], default: 'FREE' },

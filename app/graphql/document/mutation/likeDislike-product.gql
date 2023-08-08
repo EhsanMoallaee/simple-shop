@@ -1,0 +1,54 @@
+// Info: Like A Product
+mutation {
+  LikeAndDislikeProductResolver(
+    productId: "64c89229fce3fa490ca28af1"
+    like: true
+  ){
+    statusCode
+    success
+    message
+  }
+}
+// Info: Dislike A Product
+mutation {
+  LikeAndDislikeProductResolver(
+    productId: "64c89229fce3fa490ca28af1"
+    dislike: true
+  ){
+    statusCode
+    success
+    message
+  }
+}
+// Info: Remove Like or Dislike From Liked or Disliked Product
+mutation {
+  LikeAndDislikeProductResolver(
+    productId: "64c89229fce3fa490ca28af1"
+  ){
+    statusCode
+    success
+    message
+  }
+}
+// Info: Change Like To Dislike In Liked Product
+mutation {
+  LikeAndDislikeProductResolver(
+    productId: "64c89229fce3fa490ca28af1"
+    dislike: true
+  ){
+    statusCode
+    success
+    message
+  }
+}
+// Info: Change Dislike To Like In Disliked Product
+mutation {
+  LikeAndDislikeProductResolver(
+    productId: "64c89229fce3fa490ca28af1"
+    like: true
+  ){
+    statusCode
+    success
+    message
+  }
+}
