@@ -1,0 +1,68 @@
+{
+  getUserBookmarkedCoursesResolver {
+    _id
+    title
+    brief_text
+    text
+    price
+    discount
+    likes {
+      _id
+      first_name
+      last_name
+      mobile
+      email
+    }
+    dislikes {
+      _id
+      first_name
+      last_name
+      mobile
+      email
+    }
+    bookmarks {
+      _id
+      first_name
+      last_name
+      mobile
+      email
+    }
+    comments {
+      comment
+      user {
+        mobile
+        first_name
+      }
+      createdAt
+      answers {
+        _id
+        comment
+        user {
+          first_name
+          last_name
+          mobile
+        }
+        createdAt
+      }
+    }
+    tags
+    imageURL
+    category {
+      _id
+      title
+    }
+    teacher {
+      mobile
+    }
+    chapters {
+      title
+      episodes {
+        title
+        video
+        videoURL
+        time
+      }
+    }
+    totalTime
+  }
+}

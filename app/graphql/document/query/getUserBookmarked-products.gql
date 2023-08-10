@@ -1,0 +1,58 @@
+{
+  getUserBookmarkedProductsResolver {
+    _id
+    title
+    text
+    likes {
+      _id
+      first_name
+      last_name
+      email
+      mobile
+    }
+    dislikes {
+      _id
+      first_name
+      last_name
+      email
+      mobile
+    }
+    comments {
+      comment
+      user {
+        mobile
+        first_name
+        last_name
+      }
+      createdAt
+      answers {
+        comment
+        user {
+          first_name
+          last_name
+          mobile
+        }
+        createdAt
+      }
+    }
+    tags
+    category {
+      _id
+      title
+    }
+    supplier {
+        first_name
+        last_name
+        mobile
+    }
+    imageURLs
+    features {
+      length
+      width
+      height
+      weight
+      colors
+      made_in
+    }
+  }
+}

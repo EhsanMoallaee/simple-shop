@@ -1,6 +1,21 @@
 const { default: mongoose } = require("mongoose");
 const mongooseLeanVirtuals = require('mongoose-lean-virtuals');
 
+const courseBasketSchema = new mongoose.Schema({
+    courseId: { type: mongoose.Types.ObjectId, ref: 'course' },
+    count: { type: Number, default: 1}
+})
+
+const productBasketSchema = new mongoose.Schema({
+    productId: { type: mongoose.Types.ObjectId, ref: 'product' },
+    count: { type: Number, default: 1}
+})
+
+const basketSchema = new mongoose.Schema({
+    courses: { type: [courseBasketSchema], default: []},
+    products: { type: [productBasketSchema], default: []},
+})
+
 const userSchema = new mongoose.Schema({
     first_name: { type: String, },
     last_name: { type: String, },
@@ -14,7 +29,8 @@ const userSchema = new mongoose.Schema({
     birthday: { type: String },
     role: { type: String, default: 'User' },
     permissions : [{ type: mongoose.Types.ObjectId, ref: 'permission' }],
-    courses: { type: [mongoose.Types.ObjectId], ref: 'course', default: []}
+    courses: { type: [mongoose.Types.ObjectId], ref: 'course', default: [] },
+    basket: { type: basketSchema },
 }, { timestamps: true, toJSON: { virtuals: true }});
 
 userSchema.plugin(mongooseLeanVirtuals);
@@ -22,4 +38,4 @@ userSchema.index({ first_name: 'text', last_name: 'text', username: 'text', mobi
 
 module.exports = { 
     UserModel: mongoose.model('user', userSchema)
- }
+}

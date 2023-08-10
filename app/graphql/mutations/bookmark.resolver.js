@@ -14,7 +14,7 @@ const BookmarkProductResolver = {
         productId: { type: GraphQLString}
     },
     resolve: async(_, args, context) => {
-        const { productId, like, dislike } = args;
+        const { productId } = args;
         const { req } = context;
         const user = await graphqlVerifyAccessToken(req);
         validateObjectId(productId);
@@ -70,7 +70,7 @@ const BookmarkBlogResolver = {
         blogId: { type: GraphQLString}
     },
     resolve: async(_, args, context) => {
-        const { blogId, like, dislike } = args;
+        const { blogId } = args;
         const { req } = context;
         const user = await graphqlVerifyAccessToken(req);
         validateObjectId(blogId);
