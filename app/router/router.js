@@ -6,10 +6,12 @@ const { developerRouter } = require('./developerRouter/developer.routes');
 const { generalRouter } = require('./generalRouter/index.routes');
 const { verifyAccessToken } = require('../http/middlewares/login.middleware');
 const { graphqlConfig } = require('../utils/graphql/graphql.config');
+const { paymentRouter } = require('./generalRouter/payment.routes');
 const router = Router();
 
 router.use('/', generalRouter);
 router.use('/developer', developerRouter);
+router.use('/payment', paymentRouter);
 router.use('/user', authRouter);
 
 router.use('/graphql', graphqlHTTP(graphqlConfig));
