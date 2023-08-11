@@ -1,11 +1,15 @@
+const createError = require("http-errors");
 const { BlogModel } = require("../../models/blog.model");
-const { GraphQLList, GraphQLString } = require("graphql")
+const { GraphQLList } = require("graphql")
 const { BlogType } = require("../typeDefs/blog.type")
 const { CourseType } = require("../typeDefs/course.type");
 const { ProductType } = require("../typeDefs/product.type");
 const { graphqlVerifyAccessToken } = require("../../http/middlewares/login.middleware");
 const { CourseModel } = require("../../models/course.model");
 const { ProductModel } = require("../../models/product.model");
+const { UserModel } = require("../../models/user.model");
+const { AnyType } = require("../typeDefs/public.types");
+const { getUserOrderBasket } = require("../../utils/user-basket/getUserOrderBasket");
 
 const getUserBookmarkedBlogsResolver = {
     type: new GraphQLList(BlogType),
@@ -64,8 +68,20 @@ const getUserBookmarkedProductsResolver = {
     }
 }
 
+const getUserBasketResolver = {
+    type: AnyType,
+    resolve: async(_, args, context) => {
+        const { req } = context;
+        const user = await graphqlVerifyAccessToken(req);
+        const userOrderBasket = await getUserOrderBasket(user._id);
+        if(!userOrderBasket) throw new createError.NotFound('User Order Basket not found');
+        return userOrderBasket
+    }
+}
+
 module.exports = {
     getUserBookmarkedBlogsResolver,
     getUserBookmarkedCoursesResolver,
-    getUserBookmarkedProductsResolver
+    getUserBookmarkedProductsResolver,
+    getUserBasketResolver
 }

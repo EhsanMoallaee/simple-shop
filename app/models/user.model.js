@@ -30,6 +30,7 @@ const userSchema = new mongoose.Schema({
     role: { type: String, default: 'User' },
     permissions : [{ type: mongoose.Types.ObjectId, ref: 'permission' }],
     courses: { type: [mongoose.Types.ObjectId], ref: 'course', default: [] },
+    products: { type: [mongoose.Types.ObjectId], ref: 'product', default: [] },
     basket: { type: basketSchema },
 }, { timestamps: true, toJSON: { virtuals: true }});
 

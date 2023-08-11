@@ -70,18 +70,12 @@ const AddCourseToBasket = {
         validateObjectId(courseId);
         const existCourse = await checkExistCourse(courseId);
         if(!existCourse) throw new createError.NotFound('Course not found');
+        const userBaugthCourse = await UserModel.findOneAndUpdate({_id: user._id, courses: courseId});
+        if(userBaugthCourse) throw new createError.BadRequest('You have bougth this course before');
         const course = await findCourseInUserBasket(user._id, courseId);
         let message;
         if(course) {
-            const searchQuery = {
-                _id: user._id,
-                'basket.courses.courseId': courseId
-            }
-            const updateQuery = {
-                $inc: { 'basket.courses.$.count': 1 }
-            }
-            await UserModel.findOneAndUpdate(searchQuery, updateQuery);
-            message = 'Course\'s count in your basket incremented by 1 successfully';
+            throw new createError.BadRequest('This course has added to your basket before');
         } else {
             const searchQuery = {
                 _id: user._id
