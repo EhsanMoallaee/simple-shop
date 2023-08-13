@@ -31,8 +31,7 @@
  *                      type: string
  *                      description: Id of category as a foreign key
  *                  image:
- *                      type: string
- *                      format: binary
+ *                      type: file
  *                      description: image of blog
 */
 
@@ -60,7 +59,6 @@
  *                      type: string
  *                      description: Id of category as a foreign key
  *                  image:
- *                      type: string
- *                      format: binary
+ *                      type: file
  *                      description: image of blog
 */

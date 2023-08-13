@@ -8,6 +8,9 @@ const swaggerUI = require('swagger-ui-express');
 const swaggerJsDoc = require('swagger-jsdoc');
 const { router } = require('./router/router');
 const MongodbConnection = require('./utils/database-utils/mongodb.connection');
+const expressEjsLayouts = require('express-ejs-layouts');
+const { initSocket } = require('./utils/initSocket');
+const { socketHandler } = require('./socket.io');
 
 module.exports = class Application {
     #app = express();
@@ -16,6 +19,7 @@ module.exports = class Application {
         this.#PORT = PORT;
         this.#app.unsubscribe(cors());
         this.configApplication();
+        this.initTemplateEngine();
         this.connectToMongoDB();
         this.initRedis();
         this.createServer();
@@ -66,7 +70,10 @@ module.exports = class Application {
 
     createServer = () => {
         const http = require('http');
-        http.createServer(this.#app).listen(this.#PORT, () => {
+        const server = http.createServer(this.#app);
+        const io = initSocket(server);
+        socketHandler(io);
+        server.listen(this.#PORT, () => {
             console.log(`Server is running on : http://localhost:${this.#PORT}`);
         })
     }
@@ -77,6 +84,15 @@ module.exports = class Application {
 
     initRedis = () => {
         require('./utils/initRedis');
+    }
+
+    initTemplateEngine = () => {
+        this.#app.use(expressEjsLayouts);
+        this.#app.set('views', 'resource/views');
+        this.#app.set('view engine', 'ejs');
+        this.#app.set('layout extractStyles', true);
+        this.#app.set('layout extractScripts', true);
+        this.#app.set('layout', './layouts/master');
     }
 
     createRoutes = () => {

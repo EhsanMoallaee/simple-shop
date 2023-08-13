@@ -75,8 +75,7 @@
  *                  gallery_images:
  *                      type: array
  *                      items: 
- *                          type: string
- *                          format: binary
+ *                          type: file
  *                      description: Gallery images of product at least one image is required
 */
 
@@ -144,8 +143,7 @@
  *                  gallery_images:
  *                      type: array
  *                      items: 
- *                          type: string
- *                          format: binary
+ *                          type: file
  *                      description: Gallery images of product at least one image is required
 */
 

@@ -35,9 +35,8 @@
  *                          enum: ['LOCK', 'UNLOCK']
  *                      explode: false
  *                  video:
- *                      type: string
+ *                      type: file
  *                      description: upload video file
- *                      format: binary
 */
 
 // Info: Update Episode Schema:
@@ -62,7 +61,6 @@
  *                          enum: ['LOCK', 'UNLOCK']
  *                      explode: false
  *                  video:
- *                      type: string
+ *                      type: file
  *                      description: upload video file
- *                      format: binary
 */

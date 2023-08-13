@@ -44,8 +44,7 @@
  *                      type: integer
  *                      description: discount of course (Rial)
  *                  image:
- *                      type: string
- *                      format: binary
+ *                      type: file
  *                      description: image of course
 */
 
@@ -83,7 +82,6 @@
  *                      type: integer
  *                      description: discount of course (Rial)
  *                  image:
- *                      type: string
- *                      format: binary
+ *                      type: file
  *                      description: image of course
 */
