@@ -1,7 +1,7 @@
 // Info: Add Namespace:
 /**
  * @swagger
- * /namespace/add:
+ * /support/namespace/add:
  *  post:
  *      tags: [-Namespace]
  *      summary: Create new namespace
@@ -38,7 +38,7 @@
 // Info: Get All Namespaces List:
 /**
  * @swagger
- * /namespace/list:
+ * /support/namespace/list:
  *  get:
  *      tags: [-Namespace]
  *      summary: Get all namespace

@@ -11,6 +11,7 @@ const MongodbConnection = require('./utils/database-utils/mongodb.connection');
 const expressEjsLayouts = require('express-ejs-layouts');
 const { initSocket } = require('./utils/initSocket');
 const { socketHandler } = require('./socket.io');
+require('dotenv').config();
 
 module.exports = class Application {
     #app = express();

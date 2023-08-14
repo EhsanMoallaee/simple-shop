@@ -1,7 +1,7 @@
 // Info: Add Room:
 /**
  * @swagger
- * /room/add:
+ * /support/room/add:
  *  post:
  *      tags: [-Room]
  *      summary: Create new room
@@ -38,7 +38,7 @@
 // Info: Get All Rooms List:
 /**
  * @swagger
- * /room/list:
+ * /support/room/list:
  *  get:
  *      tags: [-Room]
  *      summary: Get all rooms
