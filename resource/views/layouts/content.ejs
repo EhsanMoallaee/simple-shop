@@ -1,8 +1,15 @@
 <div class="content">
     <div class="contact-profile">
-        <img src="uploads/image/default-images/avatar-man.jpg "
+        <img src="/uploads/image/default-images/avatar-man.jpg"
             alt="" />
-        <input type="hidden" id="userID" value="xx">
+        <%if(req.user.first_name && req.user.last_name){%>
+            <p><%=req.user.first_name+" "+ req.user.last_name%></p>
+        <%}else if(req.user.username){%>
+            <p><%=req.user.username%></p>
+        <%}else{%>
+            <p><%=req.user.mobile%></p>
+        <%}%>
+        <input type="hidden" id="userID" value="<%=req.user._id%>">
                     <div class="social-media">
                         <span id="onlinesCount"><strong>افراد آنلاین : </strong><span id="onlineCount">-</span></span>
                     </div>
@@ -13,13 +20,10 @@
     <div class="messages pb-5">
         <ul style="padding-bottom: 50px;">
             <li class="sent">
-                <img src="uploads/image/default-images/avatar-ninja.jpg"
-                    alt="" />
-                <p >salam dostan haleton chetore ? az course nodejs razi hastin?</p>
+                <img src="/uploads/image/default-images/avatar-man.jpg" alt="" />
             </li>
             <li class="replies">
-                <img src="uploads/image/default-images/avatar-woman.jpg" alt="" />
-                <p>salam are babab khialet rahat</p>
+                <img src="/uploads/image/default-images/avatar-ninja.jpg" alt="" />
             </li>
         </ul>
     </div>

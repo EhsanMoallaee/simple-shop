@@ -1,9 +1,11 @@
 const cors = require('cors');
 const createError = require('http-errors');
+const cookieParser = require('cookie-parser');
 const express = require('express');
 const helmet = require('helmet');
 const morgan = require('morgan');
 const path = require("path");
+const session = require('express-session');
 const swaggerUI = require('swagger-ui-express');
 const swaggerJsDoc = require('swagger-jsdoc');
 const { router } = require('./router/router');
@@ -11,6 +13,7 @@ const MongodbConnection = require('./utils/database-utils/mongodb.connection');
 const expressEjsLayouts = require('express-ejs-layouts');
 const { initSocket } = require('./utils/initSocket');
 const { socketHandler } = require('./socket.io');
+const { clientHelper } = require('./utils/client');
 require('dotenv').config();
 
 module.exports = class Application {
@@ -18,8 +21,8 @@ module.exports = class Application {
     #PORT;
     constructor(PORT) {
         this.#PORT = PORT;
-        this.#app.unsubscribe(cors());
         this.configApplication();
+        this.initClientSession();
         this.initTemplateEngine();
         this.connectToMongoDB();
         this.initRedis();
@@ -94,6 +97,21 @@ module.exports = class Application {
         this.#app.set('layout extractStyles', true);
         this.#app.set('layout extractScripts', true);
         this.#app.set('layout', './layouts/master');
+        this.#app.use((req, res, next) => {
+            this.#app.locals = clientHelper(req, res);
+            next();
+        });
+    }
+
+    initClientSession() {
+        const secret = process.env.COOKIE_PARSER_SECRET
+        this.#app.use(cookieParser(secret));
+        this.#app.use(session({
+            secret,
+            resave: true,
+            saveUninitialized: true,
+            cookie: { secure: true }
+        }))
     }
 
     createRoutes = () => {

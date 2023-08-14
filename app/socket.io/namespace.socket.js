@@ -1,58 +1,95 @@
 const { ConversationModel } = require("../models/conversation.model");
-
+const fs = require("fs");
+const path = require("path");
 module.exports = class NamespaceSocketHandler {
-    #io
+    #io;
     constructor(io) {
-        this.#io = io;
+        this.#io = io
     }
     initConnection() {
-        this.#io.on('connection', async (socket) => {
-            const namespaces = await ConversationModel.find({}, {title: 1, endpoint: 1}).lean().sort({_id: -1});
-            socket.emit('namespacesList', namespaces)
+        this.#io.on("connection", async socket => {
+            const namespaces = await ConversationModel.find({}, {
+                title: 1,
+                endpoint: 1,
+                rooms: 1
+            }).sort({
+                _id: -1
+            })
+            socket.emit("namespacesList", namespaces)
         })
     }
-    
-    async getOnlineUsersCount(endpoint, roomName) {
-        const onlineUsers = await this.#io.of(`/${endpoint}`).in(roomName).allSockets();
-        this.#io.of(`/${endpoint}`).in(roomName).emit('onlineUsersCount', Array.from(onlineUsers).length)
-    }
-
     async createNamespacesConnection() {
-        const namespaces = await ConversationModel.find({}, {title: 1, endpoint: 1, rooms: 1}).sort({_id: -1});
+        const namespaces = await ConversationModel.find({}, {
+            title: 1,
+            endpoint: 1,
+            rooms: 1
+        }).sort({
+            _id: -1
+        })
         for (const namespace of namespaces) {
-            this.#io.of(`/${namespace.endpoint}`).on('connection', async (socket) => {
-                const conversation = await ConversationModel.findOne({endpoint: namespace.endpoint}, {rooms: 1}).sort({_id: -1});
-                socket.emit('roomList', conversation.rooms);
-                socket.on('joinRoom', async (roomName) => {
-                    const lastRoom = Array.from(socket.rooms)[1];
-                    if(lastRoom) { 
-                        socket.leave(lastRoom);
-                        await this.getOnlineUsersCount(namespace.endpoint, lastRoom);
+            this.#io.of(`/${namespace.endpoint}`).on("connection", async socket => {
+                const conversation = await ConversationModel.findOne({ endpoint: namespace.endpoint }, {endpoint: 1, rooms: 1}).sort({_id: -1})
+                socket.emit("roomList", conversation.rooms)
+                socket.on("joinRoom", async roomName => {
+                    const lastRoom = Array.from(socket.rooms)[1]
+                    if(lastRoom){
+                        socket.leave(lastRoom)
+                        await this.getCountOfOnlineUsers(namespace.endpoint, roomName)
                     }
                     socket.join(roomName);
-                    await this.getOnlineUsersCount(namespace.endpoint, roomName);
-                    const roomInfo = conversation.rooms.find(item => item.name === roomName);
-                    socket.emit('roomInfo', roomInfo);
-                    this.getNewMessage(socket);
-                    socket.on('disconnect', async () => {
-                        await this.getOnlineUsersCount(namespace.endpoint, roomName);
+                    await this.getCountOfOnlineUsers(namespace.endpoint, roomName)
+                    const roomInfo = conversation.rooms.find(item => item.name == roomName)
+                    socket.emit("roomInfo", roomInfo)
+                    this.getNewMessage(socket)
+                    this.getNewLocation(socket)
+                    this.uploadFiles(socket)
+                    socket.on("disconnect", async () => {
+                        await this.getCountOfOnlineUsers(namespace.endpoint, roomName)
                     })
                 })
-            })            
+            })
         }
     }
-
-    getNewMessage(socket) {
-        socket.on('newMessage', async (data) => {
-            const {message, roomName, endpoint } = data;
-            await ConversationModel.findOneAndUpdate({endpoint, 'rooms.name': roomName}, {
-                $push: {'rooms.$.messages': {
-                    message,
-                    sender: '64cd2b219c6e29e1e9705480',
-                    date: Date.now()
-                }}
-            });
+    async getCountOfOnlineUsers(endpoint, roomName) {
+        const onlineUsers = await this.#io.of(`/${endpoint}`).in(roomName).allSockets()
+        this.#io.of(`/${endpoint}`).in(roomName).emit("countOfOnlineUsers", Array.from(onlineUsers).length)
+    }
+    getNewMessage(socket){
+        socket.on("newMessage", async data => {
+            const {message, roomName, endpoint, sender} = data
+            await ConversationModel.updateOne({endpoint, "rooms.name": roomName}, {
+                $push : {
+                    "rooms.$.messages" : {
+                        sender,
+                        message, 
+                        dateTime: Date.now()
+                    } 
+                }
+            })
+            this.#io.of(`/${endpoint}`).in(roomName).emit("confirmMessage", data)
         })
     }
-
+    getNewLocation(socket){
+        socket.on("newLocation", async data => {
+            const {location, roomName, endpoint, sender} = data
+            await ConversationModel.updateOne({endpoint, "rooms.name": roomName}, {
+                $push : {
+                    "rooms.$.locations" : {
+                        sender,
+                        location, 
+                        dateTime: Date.now()
+                    } 
+                }
+            })
+            this.#io.of(`/${endpoint}`).in(roomName).emit("confirmLocation", data)
+        })
+    }
+    uploadFiles(socket){
+        socket.on("upload", ({file, filename}, callback) => {
+            const ext = path.extname(filename)
+            fs.writeFile("public/uploads/sockets/" + String(Date.now() + ext) , file, (err) => {
+              callback({ message: err ? "failure" : "success" });
+            });
+        });
+    }
 }

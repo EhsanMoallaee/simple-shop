@@ -10,7 +10,7 @@ class RoomController extends Controller {
         if(existRoom) return next(createError.Conflict('Room with this name is already exist'));
         const roomData = { name, description, image: req?.images[0] };
         const room = await ConversationModel.findOneAndUpdate({endpoint: namespace}, {$push: { rooms: roomData }});
-        if(!room) return next(createError.BadRequest('Room creation failed'))
+        if(!room) return next(createError.BadRequest('Room creation failed'));
         return res.status(201).json({
             statusCode: 201,
             success: true,

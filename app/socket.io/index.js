@@ -1,4 +1,4 @@
-const NamespaceSocketHandler = require("./namespace.socket");
+const NamespaceSocketHandler = require("./namespace.socket")
 
 module.exports = {
     socketHandler: (io) => {
