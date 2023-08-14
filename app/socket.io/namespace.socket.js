@@ -27,18 +27,32 @@ module.exports = class NamespaceSocketHandler {
                     const lastRoom = Array.from(socket.rooms)[1];
                     if(lastRoom) { 
                         socket.leave(lastRoom);
-                        await this.getOnlineUsersCount(namespace.endpoint, roomName);
+                        await this.getOnlineUsersCount(namespace.endpoint, lastRoom);
                     }
                     socket.join(roomName);
                     await this.getOnlineUsersCount(namespace.endpoint, roomName);
                     const roomInfo = conversation.rooms.find(item => item.name === roomName);
                     socket.emit('roomInfo', roomInfo);
+                    this.getNewMessage(socket);
                     socket.on('disconnect', async () => {
                         await this.getOnlineUsersCount(namespace.endpoint, roomName);
                     })
                 })
             })            
         }
+    }
+
+    getNewMessage(socket) {
+        socket.on('newMessage', async (data) => {
+            const {message, roomName, endpoint } = data;
+            await ConversationModel.findOneAndUpdate({endpoint, 'rooms.name': roomName}, {
+                $push: {'rooms.$.messages': {
+                    message,
+                    sender: '64cd2b219c6e29e1e9705480',
+                    date: Date.now()
+                }}
+            });
+        })
     }
 
 }
