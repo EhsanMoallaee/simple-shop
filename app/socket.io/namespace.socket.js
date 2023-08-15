@@ -34,7 +34,7 @@ module.exports = class NamespaceSocketHandler {
                     const lastRoom = Array.from(socket.rooms)[1]
                     if(lastRoom){
                         socket.leave(lastRoom)
-                        await this.getCountOfOnlineUsers(namespace.endpoint, roomName)
+                        await this.getCountOfOnlineUsers(namespace.endpoint, lastRoom)
                     }
                     socket.join(roomName);
                     await this.getCountOfOnlineUsers(namespace.endpoint, roomName)
